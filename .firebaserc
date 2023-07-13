@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "kanbanfire-94cdf": {
+      "hosting": {
+        "kanban-fire": [
+          "kanbanfire-94cdf"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "kanbanfire-94cdf"
+  }
+}
