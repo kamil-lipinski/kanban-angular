@@ -61,6 +61,7 @@ export class AuthService {
   }
   // Send email verfificaiton when new user sign up
   SendVerificationMail() {
+
     // return this.afAuth.currentUser
     //   .then((u: any) => u.sendEmailVerification())
     //   .then(() => {
@@ -80,13 +81,13 @@ export class AuthService {
   // Returns true when user is looged in and email is verified
   get isLoggedIn(): boolean {
     const user = JSON.parse(localStorage.getItem('user')!);
-    return user !== null && user.emailVerified !== false ? true : false;
+    return user !== null ? true : false;
   }
   // Sign in with Google
   GoogleAuth() {
-    // return this.AuthLogin(new auth.GoogleAuthProvider()).then((res: any) => {
-    //   this.router.navigate(['dashboard']);
-    // });
+    return this.AuthLogin(new auth.GoogleAuthProvider()).then((res: any) => {
+      this.router.navigate(['dashboard']);
+    });
   }
   // Auth logic to run auth providers
   AuthLogin(provider: any) {
