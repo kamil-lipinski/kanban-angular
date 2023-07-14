@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { SignInComponent } from './sign-in/sign-in.component';
-import { SignUpComponent } from './sign-up/sign-up.component';
+import { SignInComponent } from './core/auth/sign-in/sign-in.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
-import { VerifyEmailComponent } from './verify-email/verify-email.component';
-import { AuthGuard } from './shared/guard/auth.guard';
+import { AuthGuard } from './core/guard/auth.guard';
+import { VerifyEmailComponent } from './core/auth/verify-email/verify-email.component';
+import { ForgotPasswordComponent } from './core/auth/forgot-password/forgot-password.component';
+import { SignUpComponent } from './core/auth/sign-up/sign-up.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/sign-in', pathMatch: 'full' },
@@ -14,6 +14,7 @@ const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'verify-email-address', component: VerifyEmailComponent },
+  { path: 'projects', loadChildren: () => import('./pages/projects/projects.module').then(m => m.ProjectsModule) },
 ];
 
 @NgModule({
