@@ -3,7 +3,9 @@
 }
 
 .item {
-  padding: 20px;
-  margin: 20px;
+  margin: 10px;
   cursor: pointer;
+  padding: 10px;
+  border: solid 1px #ccc;
+
 }
