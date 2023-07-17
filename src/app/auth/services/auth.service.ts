@@ -4,16 +4,39 @@ import * as auth from 'firebase/auth';
 import { Auth, authState } from '@angular/fire/auth';
 import {Firestore, DocumentReference, doc, setDoc,} from '@angular/fire/firestore';
 import { Router } from '@angular/router';
+import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 
 @Injectable()
 
 export class AuthService {
+  errorSnackbar(message: string): void {
+    const snackBarConfig: MatSnackBarConfig = {
+      panelClass: ['error-snackbar'],
+      verticalPosition: 'top',
+      horizontalPosition: 'end',
+      duration: 3000,
+    };
+    this.snackBar.open(message, 'Zamknij', snackBarConfig);
+  }
+
+  succesSnackbar(message: string): void {
+    const snackBarConfig: MatSnackBarConfig = {
+      panelClass: ['succes-snackbar'],
+      verticalPosition: 'top',
+      horizontalPosition: 'end',
+      duration: 3000,
+    };
+
+    this.snackBar.open(message, 'Zamknij', snackBarConfig);
+  }
+
   userData: any; // Save logged in user data
   constructor(
     public afs: Firestore, // Inject Firestore service
     public afAuth: Auth, // Inject Firebase auth service
     public router: Router,
-    public ngZone: NgZone // NgZone service to remov  e outside scope warning
+    public ngZone: NgZone, // NgZone service to remove outside scope warning
+    private snackBar: MatSnackBar
   ) {
     /* Saving user data in localstorage when
     logged in and setting up null when logged out */
@@ -40,7 +63,15 @@ export class AuthService {
         });
       })
       .catch((error) => {
-        window.alert(error.message);
+        if(error.message == 'Firebase: Error (auth/user-not-found).'){
+          this.errorSnackbar('Użytkownik o podanym adresie E-mail nie istnieje.');
+        }
+        else if(error.message == 'Firebase: Error (auth/wrong-password).'){
+          this.errorSnackbar('Wprowadzone hasło jest niepoprawne.');
+        }
+        else{
+          this.errorSnackbar(`${error.message}`);
+        }
       });
   }
   // Sign up with email/password
@@ -53,17 +84,31 @@ export class AuthService {
         this.SetUserData(result.user);
       })
       .catch((error) => {
-        window.alert(error.message);
+        if(error.message == 'Firebase: Error (auth/email-already-in-use).'){
+          this.errorSnackbar('Użytkownik o podanym adresie E-mail już istnieje.');
+        }
+        else{
+          this.errorSnackbar(`${error.message}`);
+        }
       });
   }
   // Send email verfificaiton when new user sign up
-  SendVerificationMail() {
+  SendVerificationMail(resend: boolean = false) {
     const user = this.afAuth.currentUser;
     if (user !== null) {
       return auth.sendEmailVerification(user).then(() => {
         this.router.navigate(['verify-email-address']);
+        if(resend){
+          this.succesSnackbar('Wysłana została wiadomość E-mail z nowym linkiem.');
+          resend = false;
+        }
       }).catch((error) => {
-        window.alert(error);
+        if(error.message == 'Firebase: Error (auth/too-many-requests).'){
+          this.errorSnackbar('Wiadomość z nowym linkiem została już wysłana.');
+        }
+        else{
+          this.errorSnackbar(`${error.message}`);
+        }
       });
     } else {
       return Promise.reject(new Error('No user is currently signed in.'));
@@ -73,10 +118,15 @@ export class AuthService {
   ForgotPassword(passwordResetEmail: string) {
     return auth.sendPasswordResetEmail(this.afAuth,passwordResetEmail)
       .then(() => {
-        window.alert('Password reset email sent, check your inbox.');
+        this.succesSnackbar('Wiadomość E-mail z linkiem do zmiany hasła została wysłana.');
       })
       .catch((error) => {
-        window.alert(error);
+        if(error.message == 'Firebase: Error (auth/user-not-found).'){
+          this.errorSnackbar('Użytkownik o podanym adresie E-mail nie istnieje.');
+        }
+        else{
+          this.errorSnackbar(`${error.message}`);
+        }
       });
   }
   // Returns true when user is looged in and email is verified
@@ -98,7 +148,7 @@ export class AuthService {
         this.SetUserData(result.user);
       })
       .catch((error) => {
-        window.alert(error);
+        // window.alert(error);
       });
   }
   /* Setting up user data when sign in with username/password,

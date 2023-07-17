@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatDialogModule } from '@angular/material/dialog';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 const MATERIALEXPORT = [
   MatCardModule,
@@ -16,7 +17,8 @@ const MATERIALEXPORT = [
   MatButtonModule,
   MatToolbarModule,
   DragDropModule,
-  MatDialogModule
+  MatDialogModule,
+  MatSnackBarModule,
 ]
 
 @NgModule({

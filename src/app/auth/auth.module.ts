@@ -4,7 +4,7 @@ import { SignInComponent } from './sign-in/sign-in.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideAuth,getAuth } from '@angular/fire/auth';
 import { Routes, RouterModule } from '@angular/router';
 import { DashboardComponent } from 'src/app/dashboard/dashboard.component';
@@ -27,7 +27,8 @@ const routes: Routes = [
     FormsModule,
     RouterModule.forChild(routes),
     provideAuth(() => getAuth()),
-    SharedModule
+    SharedModule,
+    ReactiveFormsModule
   ],
   declarations: [
     SignInComponent,

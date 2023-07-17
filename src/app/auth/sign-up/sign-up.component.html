@@ -1,53 +1,56 @@
-<div class="displayTable">
-  <div class="displayTableCell">
-    <div class="authBlock">
-      <h3>Sign Up</h3>
-      <div class="formGroup">
-        <input
-          type="email"
-          class="formControl"
-          placeholder="Email Address"
-          #userEmail
-          required
-        />
+<div class="flex items-center justify-center min-h-screen text-base" style="background-color: #f5f5f5;">
+  <div class="signup-card w-1/3 ">
+    <mat-card class="p-6">
+      <div class="mb-4">Rejestracja</div>
+
+      <form [formGroup]="form" class="w-full">
+        <div class="mb-4">
+          <mat-form-field class="w-full">
+            <input matInput placeholder="E-mail" type="email" formControlName="email">
+            <mat-error *ngIf="form.get('email')!.hasError('required')">
+              Wymagany adres E-mail
+            </mat-error>
+            <mat-error *ngIf="form.get('email')!.hasError('email')">
+              Niepoprawny adres E-mail
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="mb-4">
+          <mat-form-field class="w-full">
+            <input matInput placeholder="Hasło" type="password" formControlName="password">
+            <mat-error *ngIf="form.get('password')!.hasError('required')">
+              Wymagane hasło
+            </mat-error>
+            <mat-error *ngIf="form.get('password')!.hasError('minlength')">
+              Hasło musi składać się z co najmniej 6 znaków
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <button mat-raised-button color="primary" class="w-full mb-4" [disabled]="!form.valid"
+        (click)="authService.SignUp(form.get('email')?.value, form.get('password')?.value)">
+          Zarejestruj się
+        </button>
+      </form>
+
+      <div class="text-center mb-2">
+        Lub
       </div>
-      <div class="formGroup">
-        <input
-          type="password"
-          class="formControl"
-          placeholder="Password"
-          #userPwd
-          required
-        />
-      </div>
-      <div class="formGroup">
-        <input
-          type="button"
-          class="btn btnPrimary"
-          value="Sign Up"
-          (click)="authService.SignUp(userEmail.value, userPwd.value)"
-        />
-      </div>
-      <div class="formGroup">
-        <span class="or"><span class="orInner">Or</span></span>
-      </div>
-      <!-- Continue with Google -->
-      <div class="formGroup">
-        <button
-          type="button"
-          class="btn googleBtn"
-          (click)="authService.GoogleAuth()"
-        >
-          <i class="fab fa-google-plus-g"></i>
-          Continue with Google
+
+
+      <div class="mb-4 text-center">
+        <button mat-button (click)="authService.GoogleAuth()">
+          <div class="flex items-center">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google Icon" class="h-5 w-5 mr-1">
+            <span class="ml-2">Kontynuuj z Google</span>
+          </div>
         </button>
       </div>
-    </div>
-    <div class="redirectToLogin">
-      <span
-        >Already have an account?
-        <span class="redirect" routerLink="/sign-in">Log In</span></span
-      >
-    </div>
+
+      <div class="redirectToLogin">
+        <span>Masz już konto? <a routerLink="/sign-in" class="text-blue-500">Zaloguj się</a></span>
+      </div>
+    </mat-card>
   </div>
 </div>
