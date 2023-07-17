@@ -1,13 +1,11 @@
 import { Injectable, NgZone } from '@angular/core';
-import { User } from '../services/user';
+import { User } from '../../shared/models/user';
 import * as auth from 'firebase/auth';
 import { Auth, authState } from '@angular/fire/auth';
 import {Firestore, DocumentReference, doc, setDoc,} from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 
 export class AuthService {
   userData: any; // Save logged in user data

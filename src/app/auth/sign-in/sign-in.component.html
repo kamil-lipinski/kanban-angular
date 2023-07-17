@@ -1,0 +1,44 @@
+<div class="flex items-center justify-center min-h-screen bg-gray-100 text-base">
+  <div class="w-1/4 ">
+    <mat-card class="p-6 bg-white shadow-lg">
+      <div class="mb-4">Logowanie</div>
+
+      <form class="w-full">
+        <div class="mb-4">
+          <mat-form-field class="w-full">
+            <input matInput placeholder="E-mail" type="text" #userName required>
+          </mat-form-field>
+        </div>
+
+        <div class="mb-4">
+          <mat-form-field class="w-full">
+            <input matInput placeholder="Hasło" type="password" #userPassword required>
+          </mat-form-field>
+        </div>
+
+        <button mat-raised-button color="primary" class="w-full mb-4" (click)="authService.SignIn(userName.value, userPassword.value)">Zaloguj się</button>
+
+        <div class="text-center mb-2">
+          Lub
+        </div>
+
+        <div class="mb-4 text-center">
+          <button mat-button (click)="authService.GoogleAuth()">
+            <div class="flex items-center">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google Icon" class="h-5 w-5 mr-1">
+              <span class="ml-2">Kontynuuj z Google</span>
+            </div>
+          </button>
+        </div>
+
+        <div class="forgotPassword">
+          <a routerLink="/forgot-password" class="text-blue-500">Nie pamiętasz hasła?</a>
+        </div>
+      </form>
+
+      <div class="redirectToLogin">
+        <span>Nie masz konta? <a routerLink="/register-user" class="text-blue-500">Zarejsetruj się</a></span>
+      </div>
+    </mat-card>
+  </div>
+</div>
