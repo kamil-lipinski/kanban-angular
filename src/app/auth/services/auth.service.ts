@@ -4,39 +4,18 @@ import * as auth from 'firebase/auth';
 import { Auth, authState } from '@angular/fire/auth';
 import {Firestore, DocumentReference, doc, setDoc,} from '@angular/fire/firestore';
 import { Router } from '@angular/router';
-import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
+import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
 @Injectable()
 
 export class AuthService {
-  errorSnackbar(message: string): void {
-    const snackBarConfig: MatSnackBarConfig = {
-      panelClass: ['error-snackbar'],
-      verticalPosition: 'top',
-      horizontalPosition: 'end',
-      duration: 3000,
-    };
-    this.snackBar.open(message, 'Zamknij', snackBarConfig);
-  }
-
-  succesSnackbar(message: string): void {
-    const snackBarConfig: MatSnackBarConfig = {
-      panelClass: ['succes-snackbar'],
-      verticalPosition: 'top',
-      horizontalPosition: 'end',
-      duration: 3000,
-    };
-
-    this.snackBar.open(message, 'Zamknij', snackBarConfig);
-  }
-
   userData: any; // Save logged in user data
   constructor(
     public afs: Firestore, // Inject Firestore service
     public afAuth: Auth, // Inject Firebase auth service
     public router: Router,
     public ngZone: NgZone, // NgZone service to remove outside scope warning
-    private snackBar: MatSnackBar
+    private snackBar: SnackbarService
   ) {
     /* Saving user data in localstorage when
     logged in and setting up null when logged out */
@@ -64,13 +43,13 @@ export class AuthService {
       })
       .catch((error) => {
         if(error.message == 'Firebase: Error (auth/user-not-found).'){
-          this.errorSnackbar('Użytkownik o podanym adresie E-mail nie istnieje.');
+          this.snackBar.errorSnackbar('Użytkownik o podanym adresie E-mail nie istnieje.');
         }
         else if(error.message == 'Firebase: Error (auth/wrong-password).'){
-          this.errorSnackbar('Wprowadzone hasło jest niepoprawne.');
+          this.snackBar.errorSnackbar('Wprowadzone hasło jest niepoprawne.');
         }
         else{
-          this.errorSnackbar(`${error.message}`);
+          this.snackBar.errorSnackbar(`${error.message}`);
         }
       });
   }
@@ -85,10 +64,10 @@ export class AuthService {
       })
       .catch((error) => {
         if(error.message == 'Firebase: Error (auth/email-already-in-use).'){
-          this.errorSnackbar('Użytkownik o podanym adresie E-mail już istnieje.');
+          this.snackBar.errorSnackbar('Użytkownik o podanym adresie E-mail już istnieje.');
         }
         else{
-          this.errorSnackbar(`${error.message}`);
+          this.snackBar.errorSnackbar(`${error.message}`);
         }
       });
   }
@@ -99,15 +78,15 @@ export class AuthService {
       return auth.sendEmailVerification(user).then(() => {
         this.router.navigate(['verify-email-address']);
         if(resend){
-          this.succesSnackbar('Wysłana została wiadomość E-mail z nowym linkiem.');
+          this.snackBar.succesSnackbar('Wysłana została wiadomość E-mail z nowym linkiem.');
           resend = false;
         }
       }).catch((error) => {
         if(error.message == 'Firebase: Error (auth/too-many-requests).'){
-          this.errorSnackbar('Wiadomość z nowym linkiem została już wysłana.');
+          this.snackBar.errorSnackbar('Nowy link został już wysłany, poczekaj chwilę przed wysłaniem kolejnego.');
         }
         else{
-          this.errorSnackbar(`${error.message}`);
+          this.snackBar.errorSnackbar(`${error.message}`);
         }
       });
     } else {
@@ -118,14 +97,14 @@ export class AuthService {
   ForgotPassword(passwordResetEmail: string) {
     return auth.sendPasswordResetEmail(this.afAuth,passwordResetEmail)
       .then(() => {
-        this.succesSnackbar('Wiadomość E-mail z linkiem do zmiany hasła została wysłana.');
+        this.snackBar.succesSnackbar('Wiadomość E-mail z linkiem do zmiany hasła została wysłana.');
       })
       .catch((error) => {
-        if(error.message == 'Firebase: Error (auth/user-not-found).'){
-          this.errorSnackbar('Użytkownik o podanym adresie E-mail nie istnieje.');
+        if(error.message == 'Firebase: Error (auth/user-not-found).' || error.message == 'Firebase: Error (auth/invalid-email).'){
+          this.snackBar.errorSnackbar('Użytkownik o podanym adresie E-mail nie istnieje.');
         }
         else{
-          this.errorSnackbar(`${error.message}`);
+          this.snackBar.errorSnackbar(`${error.message}`);
         }
       });
   }
