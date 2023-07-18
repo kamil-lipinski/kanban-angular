@@ -11,12 +11,15 @@ import { DashboardComponent } from 'src/app/dashboard/dashboard.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { AuthService } from './services/auth.service';
 import { AuthGuard } from './guard/auth.guard';
+import { TaskListComponent } from '../pages/task-list/task-list.component';
+import { ProjectsComponent } from '../pages/projects/projects.component';
+import { ProjectsModule } from '../pages/projects/projects.module';
 
 const routes: Routes = [
   { path: '', redirectTo: '/sign-in', pathMatch: 'full' },
   { path: 'sign-in', component: SignInComponent },
   { path: 'register-user', component: SignUpComponent },
-  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
+  // { path: 'projects', component: ProjectsComponent, canActivate: [AuthGuard] },
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'verify-email-address', component: VerifyEmailComponent },
 ];
@@ -28,7 +31,7 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     provideAuth(() => getAuth()),
     SharedModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   declarations: [
     SignInComponent,

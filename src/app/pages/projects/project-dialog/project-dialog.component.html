@@ -1,0 +1,27 @@
+<mat-form-field>
+  <mat-label>Title</mat-label>
+  <input matInput cdkFocusInitial [(ngModel)]="data.project.title" />
+</mat-form-field>
+
+<mat-form-field>
+  <mat-label>Key</mat-label>
+  <input matInput [(ngModel)]="data.project.key"/>
+</mat-form-field>
+
+<mat-form-field>
+  <mat-label>Color Code</mat-label>
+  <input matInput [(ngModel)]="data.project.colorCode"/>
+</mat-form-field>
+
+<div mat-dialog-actions>
+  <button mat-button [mat-dialog-close]="{ project: data.project }">OK</button>
+  <button mat-button (click)="cancel()">Cancel</button>
+  <button
+    *ngIf="data.enableDelete"
+    mat-fab
+    color="primary"
+    aria-label="Delete"
+    [mat-dialog-close]="{ project: data.project, delete: true }">
+    <mat-icon>delete</mat-icon>
+  </button>
+</div>

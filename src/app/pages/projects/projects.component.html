@@ -1,1 +1,23 @@
-<p>projects works!</p>
+<mat-toolbar color="primary">
+  <mat-icon>local_fire_department</mat-icon>
+  <span>Kanban Fire</span>
+  <button (click)="authService.SignOut()">Sign out</button>
+</mat-toolbar>
+
+<div class="content-wrapper">
+  <button (click)="newProject()" mat-button>
+    <mat-icon>add</mat-icon> Add Project
+  </button>
+
+  <div class="join-project-wrapper">
+    <input type="text" [(ngModel)]="projectId" placeholder="Enter Project ID">
+    <button (click)="joinProject(projectId)" mat-button>Join Project</button>
+  </div>
+
+  <div class="container-wrapper">
+    <div class="container">
+      <h2>Projects</h2>
+        <app-project (edit)="editProject($event)" *ngFor="let project of projects | async" [project]="project"></app-project>
+    </div>
+  </div>
+</div>

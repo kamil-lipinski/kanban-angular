@@ -37,7 +37,7 @@ export class AuthService {
         this.SetUserData(result.user);
         authState(this.afAuth).subscribe((user) => {
           if (user) {
-            this.router.navigate(['dashboard']);
+            this.router.navigate(['projects']);
           }
         });
       })
@@ -116,14 +116,14 @@ export class AuthService {
   // Sign in with Google
   GoogleAuth() {
     return this.AuthLogin(new auth.GoogleAuthProvider()).then((res: any) => {
-      this.router.navigate(['dashboard']);
+      this.router.navigate(['projects']);
     });
   }
   // Auth logic to run auth providers
   AuthLogin(provider: any) {
     return auth.signInWithPopup(this.afAuth, provider)
       .then((result) => {
-        this.router.navigate(['dashboard']);
+        this.router.navigate(['projects']);
         this.SetUserData(result.user);
       })
       .catch((error) => {

@@ -1,11 +1,13 @@
+import { AuthService } from './../../auth/services/auth.service';
 import { Component, Inject, inject } from '@angular/core';
-import { Task } from '../task/task';
+import { Task } from '../../shared/models/task';
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { MatDialog } from '@angular/material/dialog';
 import { TaskDialogComponent, TaskDialogResult } from '../task-dialog/task-dialog.component';
 import { DocumentReference, Firestore, addDoc, collection, collectionData, deleteDoc, doc, runTransaction, updateDoc } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-task-list',
@@ -13,14 +15,20 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./task-list.component.css']
 })
 export class TaskListComponent {
+
+  private projectId: string;
+
   todo: Observable<Task[]>;
   inProgress: Observable<Task[]>;
   done: Observable<Task[]>;
 
-  constructor(private dialog: MatDialog, private store: Firestore) {
-    const todoCollection = collection(this.store, 'todo');
-    const inProgressCollection = collection(this.store, 'inProgress');
-    const doneCollection = collection(this.store, 'done');
+  constructor(private dialog: MatDialog, private store: Firestore, public authService: AuthService, private route: ActivatedRoute) {
+
+    this.projectId = this.route.snapshot.paramMap.get('projectId')!;
+
+    const todoCollection = collection(doc(this.store, 'projects', this.projectId), 'todo');
+    const inProgressCollection = collection(doc(this.store, 'projects', this.projectId), 'inProgress');
+    const doneCollection = collection(doc(this.store, 'projects', this.projectId), 'done');
 
     this.todo = collectionData(todoCollection, { idField: 'id' }).pipe(
       map((tasks) => tasks as Task[])
@@ -48,8 +56,8 @@ export class TaskListComponent {
         if (!result) {
           return;
         }
-        const docRef = collection(this.store, 'todo');
-        addDoc(docRef, result.task);
+        const docRef = doc(this.store, 'projects', this.projectId);
+        addDoc(collection(docRef, 'todo'), result.task);
       });
   }
 
@@ -65,11 +73,10 @@ export class TaskListComponent {
       if (!result) {
         return;
       }
+      const docRef = doc(this.store, `projects/${this.projectId}/${list}/${task.id}`) as DocumentReference;
       if (result.delete) {
-        const docRef = doc(this.store, `${list}/${task.id}`) as DocumentReference;
         deleteDoc(docRef);
       } else {
-        const docRef = doc(this.store, `${list}/${task.id}`) as DocumentReference;
         updateDoc(docRef, { ... task });
       }
     });
@@ -84,8 +91,8 @@ export class TaskListComponent {
     }
     const item = event.previousContainer.data[event.previousIndex];
     runTransaction(this.store, () => {
-      const collectionRefPrevious = collection(this.store, event.previousContainer.id);
-      const collectionRefCurrent = collection(this.store, event.container.id);
+      const collectionRefPrevious = collection(doc(this.store, 'projects', this.projectId), event.previousContainer.id);
+      const collectionRefCurrent = collection(doc(this.store, 'projects', this.projectId), event.container.id);
 
       const promise = Promise.all([
         deleteDoc(doc(collectionRefPrevious, item.id)),
@@ -101,6 +108,6 @@ export class TaskListComponent {
     );
   }
 
-  
+
 
 }

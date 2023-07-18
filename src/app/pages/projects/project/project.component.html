@@ -1,0 +1,13 @@
+<mat-card class="item" *ngIf="project" (dblclick)="edit.emit(project)">
+  <h2>{{ project.title }}</h2>
+  <p>
+    {{ project.key }}
+  </p>
+  <p>
+    {{ project.colorCode }}
+  </p>
+  <p>
+    {{ project.uid }}
+  </p>
+  <a class="text-blue-600" [routerLink]="['/projects/', project.id ,'boards']">Go to Project Boards</a>
+</mat-card>
