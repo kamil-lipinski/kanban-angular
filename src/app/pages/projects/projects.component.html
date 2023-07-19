@@ -17,7 +17,13 @@
   <div class="container-wrapper">
     <div class="container">
       <h2>Projects</h2>
-        <app-project (edit)="editProject($event)" *ngFor="let project of projects | async" [project]="project"></app-project>
+      <ng-container *ngIf="projects | async as projectList; else loading">
+        <app-project (edit)="editProject($event)" *ngFor="let project of projectList" [project]="project"></app-project>
+      </ng-container>
     </div>
   </div>
 </div>
+
+<ng-template #loading>
+  <mat-spinner></mat-spinner>
+</ng-template>

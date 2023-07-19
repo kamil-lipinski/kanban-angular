@@ -8,6 +8,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatDialogModule } from '@angular/material/dialog';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 const MATERIALEXPORT = [
   MatCardModule,
@@ -19,6 +20,7 @@ const MATERIALEXPORT = [
   DragDropModule,
   MatDialogModule,
   MatSnackBarModule,
+  MatProgressSpinnerModule
 ]
 
 @NgModule({

@@ -1,0 +1,26 @@
+{
+  "printWidth": 120,
+  "singleQuote": true,
+  "useTabs": false,
+  "bracketSameLine": true,
+  "tabWidth": 2,
+  "htmlWhitespaceSensitivity": "ignore",
+  "semi": true,
+  "bracketSpacing": true,
+  "arrowParens": "avoid",
+  "trailingComma": "all",
+  "overrides": [
+    {
+      "files": "*.html",
+      "options": {
+        "printWidth": 1000
+      }
+    },
+    {
+      "files": "src/app/services/rest/enums/**/*.ts",
+      "options": {
+        "printWidth": 3000
+      }
+    }
+  ]
+}

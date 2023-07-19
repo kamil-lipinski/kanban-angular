@@ -6,7 +6,9 @@ import {Firestore, DocumentReference, doc, setDoc,} from '@angular/fire/firestor
 import { Router } from '@angular/router';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 
 export class AuthService {
   userData: any; // Save logged in user data
