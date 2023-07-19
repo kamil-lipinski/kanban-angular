@@ -7,17 +7,18 @@ import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { environment } from '../environments/environment';
 import { provideFirestore,getFirestore } from '@angular/fire/firestore';
 import { AppRoutingModule } from './app-routing.module';
-import { DashboardComponent } from './dashboard/dashboard.component';
 import { SharedModule } from './shared/shared.module';
 import { SnackbarService } from './core/services/snackbar.service';
 import { ProjectsModule } from './pages/projects/projects.module';
 import { AuthModule  } from './auth/auth.module';
-import { TaskModule } from './pages/task.module';
+import { MainComponent } from './pages/main/main.component';
+import { CoreModule } from './core/core.module';
+import { TaskModule } from './pages/tasks/task.module';
 
 @NgModule({
   declarations: [
     AppComponent,
-    DashboardComponent
+    MainComponent
    ],
   imports: [
     BrowserModule,
@@ -28,8 +29,7 @@ import { TaskModule } from './pages/task.module';
     AppRoutingModule,
     AuthModule,
     SharedModule,
-    ProjectsModule,
-    TaskModule
+    CoreModule
   ],
   providers: [SnackbarService],
   bootstrap: [AppComponent]

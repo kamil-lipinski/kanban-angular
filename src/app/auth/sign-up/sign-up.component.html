@@ -18,12 +18,27 @@
 
         <div class="mb-4">
           <mat-form-field class="w-full">
-            <input matInput placeholder="Hasło" type="password" formControlName="password">
+            <input matInput [type]="hide ? 'password' : 'text'" placeholder="Hasło" formControlName="password">
+            <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+              <mat-icon style="color: #3f51b5;">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
             <mat-error *ngIf="form.get('password')!.hasError('required')">
               Wymagane hasło
             </mat-error>
             <mat-error *ngIf="form.get('password')!.hasError('minlength')">
-              Hasło musi składać się z co najmniej 6 znaków
+              Hasło musi mieć co najmniej 6 znaków
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="mb-4">
+          <mat-form-field class="w-full">
+            <input matInput [type]="hide2 ? 'password' : 'text'" placeholder="Powtórz hasło" formControlName="password2">
+            <button mat-icon-button matSuffix (click)="hide2 = !hide2" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide2">
+              <mat-icon style="color: #3f51b5;">{{hide2 ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-error *ngIf="form.get('password2')?.errors?.['mismatch']">
+              Hasła nie są identyczne
             </mat-error>
           </mat-form-field>
         </div>
@@ -49,7 +64,7 @@
       </div>
 
       <div class="redirectToLogin">
-        <span>Masz już konto? <a routerLink="/sign-in" class="text-blue-500">Zaloguj się</a></span>
+        <span>Masz już konto? <a routerLink="/sign-in" style="color: #3f51b5;">Zaloguj się</a></span>
       </div>
     </mat-card>
   </div>

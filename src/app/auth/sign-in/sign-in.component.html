@@ -18,7 +18,10 @@
 
         <div class="mb-4">
           <mat-form-field class="w-full">
-            <input matInput placeholder="Hasło" type="password" formControlName="password">
+            <input matInput [type]="hide ? 'password' : 'text'" placeholder="Hasło" formControlName="password">
+            <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+              <mat-icon style="color: #3f51b5;">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
             <mat-error *ngIf="form.get('password')!.hasError('required')">
               Wymagane hasło
             </mat-error>
@@ -49,11 +52,11 @@
       </div>
 
       <div class="forgotPassword">
-        <a routerLink="/forgot-password" class="text-blue-500">Nie pamiętasz hasła?</a>
+        <a routerLink="/forgot-password" style="color: #3f51b5;">Nie pamiętasz hasła?</a>
       </div>
 
       <div class="redirectToLogin">
-        <span>Nie masz konta? <a routerLink="/register-user" class="text-blue-500">Zarejsetruj się</a></span>
+        <span>Nie masz konta? <a routerLink="/register-user" style="color: #3f51b5;">Zarejsetruj się</a></span>
       </div>
     </mat-card>
   </div>

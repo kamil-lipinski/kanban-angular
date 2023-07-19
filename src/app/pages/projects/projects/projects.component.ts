@@ -1,15 +1,13 @@
-import { AuthService } from './../../auth/services/auth.service';
 import { Component, Inject, inject } from '@angular/core';
-import { Task } from '../../shared/models/task';
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { MatDialog } from '@angular/material/dialog';
-import { TaskDialogComponent, TaskDialogResult } from '../task-dialog/task-dialog.component';
 import { DocumentReference, Firestore, addDoc, getDoc, collection, collectionData, deleteDoc, doc, runTransaction, updateDoc, query, where } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Project } from 'src/app/shared/models/project';
-import { ProjectDialogComponent, ProjectDialogResult } from './project-dialog/project-dialog.component';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
+import { AuthService } from 'src/app/auth/services/auth.service';
+import { ProjectDialogComponent, ProjectDialogResult } from '../project-dialog/project-dialog.component';
 
 @Component({
   selector: 'app-projects',

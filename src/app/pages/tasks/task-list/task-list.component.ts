@@ -1,6 +1,4 @@
-import { AuthService } from './../../auth/services/auth.service';
 import { Component, Inject, inject, OnInit } from '@angular/core';
-import { Task } from '../../shared/models/task';
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { MatDialog } from '@angular/material/dialog';
 import { TaskDialogComponent, TaskDialogResult } from '../task-dialog/task-dialog.component';
@@ -8,6 +6,8 @@ import { DocumentReference, Firestore, addDoc, collection, collectionData, delet
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
+import { AuthService } from 'src/app/auth/services/auth.service';
+import { Task } from 'src/app/shared/models/task';
 
 @Component({
   selector: 'app-task-list',

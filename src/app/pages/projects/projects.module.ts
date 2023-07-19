@@ -1,15 +1,18 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { ProjectsRoutingModule } from './projects-routing.module';
-import { ProjectsComponent } from './projects.component';
-import { ProjectDialogComponent } from './project-dialog/project-dialog.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { FormsModule } from '@angular/forms';
-import { ProjectComponent } from './project/project.component';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { AuthModule } from '@angular/fire/auth';
+import { RouterModule, Routes } from '@angular/router';
+import { ProjectDialogComponent } from './project-dialog/project-dialog.component';
+import { ProjectComponent } from './project/project.component';
+import { ProjectsComponent } from './projects/projects.component';
 
+const routes: Routes = [
+  { path: '', component: ProjectsComponent }
+];
 
 @NgModule({
   declarations: [
@@ -19,10 +22,11 @@ import { AuthModule } from '@angular/fire/auth';
   ],
   imports: [
     CommonModule,
-    ProjectsRoutingModule,
     SharedModule,
-    FormsModule
+    FormsModule,
+    RouterModule.forChild(routes)
   ],
+  exports: [RouterModule],
   providers: []
 })
 export class ProjectsModule { }
