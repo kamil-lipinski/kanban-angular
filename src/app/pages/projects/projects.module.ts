@@ -21,9 +21,8 @@ import { AuthModule } from '@angular/fire/auth';
     CommonModule,
     ProjectsRoutingModule,
     SharedModule,
-    FormsModule,
-    AuthModule
+    FormsModule
   ],
-  providers: [AuthService]
+  providers: []
 })
 export class ProjectsModule { }

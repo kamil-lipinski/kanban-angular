@@ -8,11 +8,11 @@ import { AuthService } from '../auth/services/auth.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
-import { Routes } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
 
 const routes: Routes = [
-  { path: ':projectID/boards', component: TaskListComponent }
+  { path: '', component: TaskListComponent }
 ];
 
 @NgModule({
@@ -23,10 +23,11 @@ const routes: Routes = [
   ],
   imports: [
     SharedModule,
-    BrowserModule,
-    BrowserAnimationsModule,
+    // BrowserAnimationsModule,
     FormsModule,
+    RouterModule.forChild(routes)
   ],
-  providers: [AuthService]
+  exports: [RouterModule],
+  providers: []
 })
 export class TaskModule { }

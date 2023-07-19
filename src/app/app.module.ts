@@ -36,7 +36,7 @@ import { TaskModule } from './pages/task.module';
     AuthModule,
     TaskModule
   ],
-  providers: [SnackbarService, AuthGuard, AuthService],
+  providers: [SnackbarService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

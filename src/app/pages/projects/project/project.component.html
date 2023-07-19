@@ -7,7 +7,7 @@
     {{ project.colorCode }}
   </p>
   <p>
-    {{ project.uid }}
+    id: {{ project.id }}
   </p>
-  <a class="text-blue-600" [routerLink]="['/projects/', project.id ,'boards']">Go to Project Boards</a>
+  <a class="text-blue-600" [routerLink]="['/projects/',project.id ,'tasks']">Go to Project Tasks</a>
 </mat-card>

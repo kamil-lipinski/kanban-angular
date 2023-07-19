@@ -1,5 +1,5 @@
 import { AuthService } from './../../auth/services/auth.service';
-import { Component, Inject, inject } from '@angular/core';
+import { Component, Inject, inject, OnInit } from '@angular/core';
 import { Task } from '../../shared/models/task';
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { MatDialog } from '@angular/material/dialog';
@@ -14,17 +14,20 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './task-list.component.html',
   styleUrls: ['./task-list.component.css']
 })
-export class TaskListComponent {
+export class TaskListComponent{
 
-  private projectId: string;
+  public projectId!: string;
 
-  todo: Observable<Task[]>;
-  inProgress: Observable<Task[]>;
-  done: Observable<Task[]>;
+  todo!: Observable<Task[]>;
+  inProgress!: Observable<Task[]>;
+  done!: Observable<Task[]>;
 
-  constructor(private dialog: MatDialog, private store: Firestore, public authService: AuthService, private route: ActivatedRoute) {
+  constructor(private dialog: MatDialog, private store: Firestore, public authService: AuthService, private route: ActivatedRoute) {}
 
-    this.projectId = this.route.snapshot.paramMap.get('projectId')!;
+  ngOnInit() {
+    this.route.params.subscribe(params => {
+      this.projectId = params['projectId'];
+    });
 
     const todoCollection = collection(doc(this.store, 'projects', this.projectId), 'todo');
     const inProgressCollection = collection(doc(this.store, 'projects', this.projectId), 'inProgress');
@@ -107,7 +110,4 @@ export class TaskListComponent {
       event.currentIndex
     );
   }
-
-
-
 }

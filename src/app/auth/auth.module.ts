@@ -19,9 +19,10 @@ const routes: Routes = [
   { path: '', redirectTo: '/sign-in', pathMatch: 'full' },
   { path: 'sign-in', component: SignInComponent },
   { path: 'register-user', component: SignUpComponent },
-  // { path: 'projects', component: ProjectsComponent, canActivate: [AuthGuard] },
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'verify-email-address', component: VerifyEmailComponent },
+  // { path: 'projects', component: ProjectsComponent, canActivate: [AuthGuard] }
+  // { path: 'projects', loadChildren: () => import('../pages/projects/projects.module').then(m => m.ProjectsModule), canActivate:[AuthGuard] }
 ];
 
 @NgModule({
@@ -42,6 +43,6 @@ const routes: Routes = [
   exports: [
     CommonModule
   ],
-  providers:[AuthService, AuthGuard]
+  providers:[AuthGuard, AuthService]
 })
 export class AuthModule { }
