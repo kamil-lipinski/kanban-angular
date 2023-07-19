@@ -1,17 +1,24 @@
 <mat-toolbar color="primary" class="flex justify-between items-center">
   <div class="flex items-center space-x-10">
     <span>Kanban App</span>
-    <button mat-button routerLink="/projects" >Projekty</button>
-    <button mat-button>Button2</button>
+    <button mat-button routerLink="/projects">
+      <mat-icon>folder</mat-icon>
+      Projekty
+    </button>
   </div>
   <div class="flex items-center space-x-4">
     <button mat-icon-button [matMenuTriggerFor]="menu" class="p-2">
       <mat-icon>account_circle</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
-      <button mat-menu-item (click)="authService.SignOut()">Wyloguj się</button>
-      <button mat-menu-item routerLink="/user">Twoje konto</button>
+      <button mat-menu-item routerLink="/user">
+        <mat-icon>person</mat-icon>
+        Twoje konto
+      </button>
+      <button mat-menu-item (click)="authService.SignOut()">
+        <mat-icon>exit_to_app</mat-icon>
+        Wyloguj się
+      </button>
     </mat-menu>
   </div>
 </mat-toolbar>
-
