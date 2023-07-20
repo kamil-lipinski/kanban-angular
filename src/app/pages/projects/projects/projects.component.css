@@ -1,3 +1,15 @@
 .full-height-container {
   height: calc(100vh - 64px);
 }
+
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  background-color: white;
+}
+
+td, th {
+  width: 25%;
+}

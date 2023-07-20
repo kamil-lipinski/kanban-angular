@@ -1,4 +1,4 @@
-import { Component, Inject, inject } from '@angular/core';
+import { Component, Inject, ViewChild, inject } from '@angular/core';
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { MatDialog } from '@angular/material/dialog';
 import { DocumentReference, Firestore, addDoc, getDoc, collection, collectionData, deleteDoc, doc, runTransaction, updateDoc, query, where, or } from '@angular/fire/firestore';
@@ -10,6 +10,9 @@ import { AuthService } from 'src/app/auth/services/auth.service';
 import { ProjectDialogComponent, ProjectDialogResult } from '../project-dialog/project-dialog.component';
 import { ProjectDialogJoinComponent } from '../project-dialog-join/project-dialog-join.component';
 import { User } from 'src/app/shared/models/user';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-projects',
@@ -18,10 +21,13 @@ import { User } from 'src/app/shared/models/user';
 })
 export class ProjectsComponent {
   private uid: string;
-
   projectId!: string;
-
   projects: Observable<Project[]>;
+  dataSource!: MatTableDataSource<Project>;
+  displayedColumns: string[] = ['title', 'key', 'owner'];
+
+  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(private dialog: MatDialog, private store: Firestore, public authService: AuthService, private snackbar: SnackbarService) {
     this.uid = JSON.parse(localStorage.getItem('user')!).uid;
@@ -36,6 +42,10 @@ export class ProjectsComponent {
     this.projects = collectionData(projectCollection, { idField: 'id' }).pipe(
       map((project) => project as Project[])
     );
+
+    this.projects.subscribe((projects) => {
+      this.dataSource = new MatTableDataSource(projects);
+    });
   }
 
   newProject(): void {
@@ -129,6 +139,15 @@ export class ProjectsComponent {
         updateDoc(docRef, { ... project });
       }
     });
+  }
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
   }
 
 }
