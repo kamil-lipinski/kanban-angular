@@ -41,7 +41,8 @@ export class ProjectMemberGuard implements CanActivate {
         if (projectSnapshot.exists()) {
           const projectData = projectSnapshot.data();
           const members = projectData?.['members'] || {};
-          if (Object.prototype.hasOwnProperty.call(members, uid)) {
+          const owner = projectData?.['owner'] || '';
+          if (Object.prototype.hasOwnProperty.call(members, uid) || owner === uid) {
             return true;
           } else {
             this.router.navigate(['404-not-found']);

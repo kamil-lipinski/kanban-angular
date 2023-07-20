@@ -1,14 +1,21 @@
-<mat-card class="item" *ngIf="project" (dblclick)="edit.emit(project)">
-  <h2>{{ project.title }}</h2>
-  <p>
-    {{ project.key }}
-  </p>
-  <p>
-    {{ project.colorCode }}
-  </p>
-  <p>
-    id: {{ project.id }}
-  </p>
-  <a class="text-blue-600" [routerLink]="['/projects/',project.id ,'tasks']">Go to Project Tasks</a>
-</mat-card>
+<div class="mb-4 cursor-pointer" *ngIf="project" (click)="goToProjectTasks(project.id)">
+  <mat-card>
+    <h2>{{ project.title }}</h2>
+    <p>
+      {{ project.key }}
+    </p>
+    <p>
+      {{ project.colorCode }}
+    </p>
+    <p>
+      id: {{ project.id }}
+    </p>
+    <p>
+      owner id: {{ project.owner }}
+    </p>
+    <button mat-icon-button color="primary" (click)="$event.stopPropagation()">
+      <mat-icon>menu</mat-icon>
+    </button>
+  </mat-card>
+<div>
 

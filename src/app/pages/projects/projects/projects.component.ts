@@ -1,13 +1,15 @@
 import { Component, Inject, inject } from '@angular/core';
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { MatDialog } from '@angular/material/dialog';
-import { DocumentReference, Firestore, addDoc, getDoc, collection, collectionData, deleteDoc, doc, runTransaction, updateDoc, query, where } from '@angular/fire/firestore';
+import { DocumentReference, Firestore, addDoc, getDoc, collection, collectionData, deleteDoc, doc, runTransaction, updateDoc, query, where, or } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Project } from 'src/app/shared/models/project';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { ProjectDialogComponent, ProjectDialogResult } from '../project-dialog/project-dialog.component';
+import { ProjectDialogJoinComponent } from '../project-dialog-join/project-dialog-join.component';
+import { User } from 'src/app/shared/models/user';
 
 @Component({
   selector: 'app-projects',
@@ -25,7 +27,11 @@ export class ProjectsComponent {
     this.uid = JSON.parse(localStorage.getItem('user')!).uid;
     // this.uid = this.authService.userData.uid;
 
-    const projectCollection = query(collection(this.store,'projects'), where(`members.${this.uid}`, '==', true));
+    const projectCollection = query(collection(this.store,'projects'),
+      or(
+        where(`members.${this.uid}`, '==', true),where('owner', '==', this.uid)
+      )
+    );
 
     this.projects = collectionData(projectCollection, { idField: 'id' }).pipe(
       map((project) => project as Project[])
@@ -47,16 +53,15 @@ export class ProjectsComponent {
         }
         const projectData = {
           ...result.project,
-          members: {
-            [this.uid]: true, // Add the current user as a member
-          },
+          owner: this.authService.userData.uid,
         };
         const docRef = collection(this.store, 'projects');
         addDoc(docRef, projectData);
       });
   }
 
-  joinProject(projectId: string): void {
+  doJoinProject(projectId: string): void {
+
     const projectRef = doc(this.store, 'projects', projectId);
 
     const memberData = {
@@ -88,6 +93,19 @@ export class ProjectsComponent {
           });
       } else {
         this.snackbar.errorSnackbar('Project does not exist.');
+      }
+    });
+  }
+
+  joinProject(projectId: string): void {
+    const dialogRef = this.dialog.open(ProjectDialogJoinComponent, {
+      width: '270px',
+      data: { projectId: projectId }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && result.projectId) {
+        this.doJoinProject(result.projectId);
       }
     });
   }

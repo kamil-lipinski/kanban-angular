@@ -9,6 +9,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { ProjectDialogComponent } from './project-dialog/project-dialog.component';
 import { ProjectComponent } from './project/project.component';
 import { ProjectsComponent } from './projects/projects.component';
+import { ProjectDialogJoinComponent } from './project-dialog-join/project-dialog-join.component';
 
 const routes: Routes = [
   { path: '', component: ProjectsComponent }
@@ -18,7 +19,8 @@ const routes: Routes = [
   declarations: [
     ProjectsComponent,
     ProjectDialogComponent,
-    ProjectComponent
+    ProjectComponent,
+    ProjectDialogJoinComponent
   ],
   imports: [
     CommonModule,
