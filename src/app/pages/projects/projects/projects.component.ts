@@ -23,6 +23,7 @@ export class ProjectsComponent {
 
   constructor(private dialog: MatDialog, private store: Firestore, public authService: AuthService, private snackbar: SnackbarService) {
     this.uid = JSON.parse(localStorage.getItem('user')!).uid;
+    // this.uid = this.authService.userData.uid;
 
     const projectCollection = query(collection(this.store,'projects'), where(`members.${this.uid}`, '==', true));
 

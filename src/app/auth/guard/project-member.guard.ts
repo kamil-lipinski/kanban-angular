@@ -17,6 +17,7 @@ export class ProjectMemberGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
 
     const projectId = next.params['projectId'];
+    // const user = this.authService.userData;
     const user = JSON.parse(localStorage.getItem('user')!);
 
     if (this.authService.isLoggedIn !== true) {
