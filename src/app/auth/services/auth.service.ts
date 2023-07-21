@@ -80,7 +80,7 @@ export class AuthService {
       return auth.sendEmailVerification(user).then(() => {
         this.router.navigate(['verify-email-address']);
         if(resend){
-          this.snackBar.succesSnackbar('Wysłana została wiadomość E-mail z nowym linkiem.');
+          this.snackBar.successSnackbar('Wysłana została wiadomość E-mail z nowym linkiem.');
           resend = false;
         }
       }).catch((error) => {
@@ -99,7 +99,7 @@ export class AuthService {
   ForgotPassword(passwordResetEmail: string) {
     return auth.sendPasswordResetEmail(this.afAuth,passwordResetEmail)
       .then(() => {
-        this.snackBar.succesSnackbar('Wiadomość E-mail z linkiem do zmiany hasła została wysłana.');
+        this.snackBar.successSnackbar('Wiadomość E-mail z linkiem do zmiany hasła została wysłana.');
       })
       .catch((error) => {
         if(error.message == 'Firebase: Error (auth/user-not-found).' || error.message == 'Firebase: Error (auth/invalid-email).'){

@@ -7,13 +7,14 @@ import { map } from 'rxjs/operators';
 import { Project } from 'src/app/shared/models/project';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { AuthService } from 'src/app/auth/services/auth.service';
-import { ProjectDialogComponent, ProjectDialogResult } from '../project-dialog/project-dialog.component';
+import { ProjectDialogComponent } from '../project-dialog/project-dialog.component';
 import { ProjectDialogJoinComponent } from '../project-dialog-join/project-dialog-join.component';
 import { User } from 'src/app/shared/models/user';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { Router } from '@angular/router';
+import { ConfirmationDialogComponent } from 'src/app/shared/components/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-projects',
@@ -52,21 +53,18 @@ export class ProjectsComponent {
       map((project) => project as Project[])
     );
 
-    // this.projects.subscribe((projects) => {
-    //   this.dataSource = new MatTableDataSource(projects);
-    // });
   }
 
   newProject(): void {
     const dialogRef = this.dialog.open(ProjectDialogComponent, {
-      width: '270px',
+      width: '300px',
       data: {
         project: {},
       },
     });
     dialogRef
       .afterClosed()
-      .subscribe((result: ProjectDialogResult|undefined) => {
+      .subscribe((result) => {
         if (!result) {
           return;
         }
@@ -91,9 +89,10 @@ export class ProjectsComponent {
       if (projectSnapshot.exists()) {
         const projectData = projectSnapshot.data();
         const existingMembers = projectData?.['members'] || {};
+        const owner = projectData?.['owner'] || '';
 
         // Check if the user is already a member
-        if (existingMembers.hasOwnProperty(this.uid)) {
+        if (existingMembers.hasOwnProperty(this.uid) || owner === this.uid) {
           this.snackbar.errorSnackbar('You are already a member of this project');
           return;
         }
@@ -105,7 +104,7 @@ export class ProjectsComponent {
 
         updateDoc(projectRef, { members: updatedMembers })
           .then(() => {
-            this.snackbar.succesSnackbar('Joined the project successfully.');
+            this.snackbar.successSnackbar('Joined the project successfully.');
           })
           .catch((error) => {
             this.snackbar.errorSnackbar('Error joining the project.');
@@ -118,7 +117,7 @@ export class ProjectsComponent {
 
   joinProject(projectId: string): void {
     const dialogRef = this.dialog.open(ProjectDialogJoinComponent, {
-      width: '270px',
+      width: '30%',
       data: { projectId: projectId }
     });
 
@@ -133,25 +132,60 @@ export class ProjectsComponent {
     if (this.selectedRowForMenu) {
       const project = this.selectedRowForMenu;
       const dialogRef = this.dialog.open(ProjectDialogComponent, {
-        width: '270px',
+        width: '300px',
         data: {
           project,
-          enableDelete: true,
         },
       });
-      dialogRef.afterClosed().subscribe((result: ProjectDialogResult | undefined) => {
+      dialogRef.afterClosed().subscribe((result) => {
         if (!result) {
           return;
         }
         const docRef = doc(this.store, `projects/${project.id}`);
-        if (result.delete) {
-          deleteDoc(docRef);
-        } else {
-          updateDoc(docRef, { ...project });
-        }
+        updateDoc(docRef, { ...project });
       });
     } else {
       console.log('No row selected for editing.');
+    }
+  }
+
+  deleteProject(): void {
+    if (this.selectedRowForMenu) {
+      const project = this.selectedRowForMenu;
+      const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+        width: '300px',
+        data: 'Czy na pewno chcesz usunąć ten projekt?'
+      });
+
+      dialogRef.afterClosed().subscribe((result: boolean) => {
+        if (result) {
+          const docRef = doc(this.store, `projects/${project.id}`);
+          deleteDoc(docRef)
+            .then(() => {
+              this.snackbar.successSnackbar('Project deleted successfully.');
+            })
+            .catch((error) => {
+              this.snackbar.errorSnackbar('Error deleting the project.');
+            });
+        }
+      });
+    } else {
+      console.log('No row selected for deleting.');
+    }
+  }
+
+  copyProjectId(){
+    if (this.selectedRowForMenu) {
+      const project = this.selectedRowForMenu;
+      const projectId = project.id;
+      navigator.clipboard.writeText(projectId).then(() => {
+        this.snackbar.successSnackbar('Skopiowano ID projektu do schowka');
+      }).catch((error) => {
+        this.snackbar.errorSnackbar('Kopiowanie ID projektu do schowka nie powiodło się');
+      });
+
+    } else {
+      console.log('No row selected for copying.');
     }
   }
 

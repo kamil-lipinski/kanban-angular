@@ -15,12 +15,14 @@ import { MainComponent } from './pages/main/main.component';
 import { CoreModule } from './core/core.module';
 import { TaskModule } from './pages/tasks/task.module';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { ConfirmationDialogComponent } from './shared/components/confirmation-dialog/confirmation-dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MainComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    ConfirmationDialogComponent,
    ],
   imports: [
     BrowserModule,

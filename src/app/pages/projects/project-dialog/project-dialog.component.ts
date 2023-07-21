@@ -26,10 +26,9 @@ export class ProjectDialogComponent{
 
 export interface ProjectDialogData {
   project: Partial<Project>;
-  enableDelete: boolean;
 }
 
-export interface ProjectDialogResult {
-  project: Project;
-  delete?: boolean;
-}
+// export interface ProjectDialogResult {
+//   project: Project;
+//   delete?: boolean;
+// }

@@ -1,74 +1,96 @@
-<div class="full-height-container flex justify-center text-base" style="background-color: #f5f5f5;">
-  <div class="w-3/4 mt-4">
-    <div class="flex lg:items-baseline lg:justify-between lg:flex-row items-center flex-col-reverse">
-      <mat-form-field>
-        <input matInput (keyup)="applyFilter($event)" placeholder="Filtruj projekty..." #input>
-      </mat-form-field>
-      <div class="flex space-x-0 flex-col sm:flex-row sm:space-x-4">
-        <button class="mb-4 w-44" mat-raised-button color="primary" (click)="newProject()" mat-button>
-          Stwórz projekt
-        </button>
-        <button class="mb-4 w-44" mat-raised-button color="primary" (click)="joinProject(projectId)">
-          Dołącz do projektu
-        </button>
+<div style="height: calc(100% - 64px); background-color: #f5f5f5;">
+  <div class="full-height-container flex justify-center text-base" style="background-color: #f5f5f5;">
+    <div class="w-3/4 mt-4">
+      <div class="flex lg:items-baseline lg:justify-between lg:flex-row items-center flex-col-reverse">
+        <mat-form-field>
+          <input matInput (keyup)="applyFilter($event)" placeholder="Filtruj projekty..." #input>
+        </mat-form-field>
+        <div class="flex space-x-0 flex-col sm:flex-row sm:space-x-4">
+          <button class="mb-4 w-44" mat-raised-button color="primary" (click)="newProject()" mat-button>
+            Stwórz projekt
+          </button>
+          <button class="mb-4 w-44" mat-raised-button color="primary" (click)="joinProject(projectId)">
+            Dołącz do projektu
+          </button>
+        </div>
       </div>
-    </div>
 
-    <div class="mat-elevation-z8 overflow-auto">
-      <ng-container *ngIf="projects | async as projectList; else loading">
-        <table mat-table [dataSource]="dataSource" matSort>
+      <div class="mat-elevation-z8 overflow-auto mb-10">
+        <ng-container *ngIf="projects | async as projectList; else loading">
+          <ng-container *ngIf="projectList.length > 0; else noProjects">
+            <table mat-table [dataSource]="dataSource" matSort>
 
-          <!-- Title Column -->
-          <ng-container matColumnDef="title">
-            <th class="w-1/3" mat-header-cell *matHeaderCellDef mat-sort-header> Nazwa </th>
-            <td class="w-1/3" mat-cell *matCellDef="let row"> {{row.title}} </td>
+              <!-- Title Column -->
+              <ng-container matColumnDef="title">
+                <th class="w-1/3" mat-header-cell *matHeaderCellDef mat-sort-header> Nazwa </th>
+                <td class="w-1/3" mat-cell *matCellDef="let row"> {{row.title}} </td>
+              </ng-container>
+
+              <!-- Key Column -->
+              <ng-container matColumnDef="key">
+                <th class="w-1/3" mat-header-cell *matHeaderCellDef mat-sort-header> Skrót </th>
+                <td class="w-1/3" mat-cell *matCellDef="let row"> {{row.key}} </td>
+              </ng-container>
+
+              <!-- Owner Column -->
+              <ng-container matColumnDef="owner">
+                <th class="w-1/3" mat-header-cell *matHeaderCellDef mat-sort-header> Właściciel </th>
+                <td class="w-1/3" mat-cell *matCellDef="let row">
+                  <app-user-info [userId]="row.owner"></app-user-info>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="actions">
+                <th class="w-2" mat-header-cell *matHeaderCellDef></th>
+                <td class="w-2" mat-cell *matCellDef="let row">
+                  <button mat-icon-button color="primary" [matMenuTriggerFor]="menu" aria-label="Menu" (click)="$event.stopPropagation(); selectedRowForMenu = row">
+                    <mat-icon>menu</mat-icon>
+                  </button>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="table-row" (click)="goToProjectTasks(row.id)"></tr>
+
+              <!-- Row shown when there is no matching data. -->
+              <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell" colspan="4">Brak projektów pasujących do filtru: "{{input.value}}"</td>
+              </tr>
+            </table>
+            <mat-divider></mat-divider>
+            <mat-paginator [pageSizeOptions]="[12]" showFirstLastButtons="false" aria-label="Select page of projects"></mat-paginator>
           </ng-container>
-
-          <!-- Key Column -->
-          <ng-container matColumnDef="key">
-            <th class="w-1/3" mat-header-cell *matHeaderCellDef mat-sort-header> Skrót </th>
-            <td class="w-1/3" mat-cell *matCellDef="let row"> {{row.key}} </td>
-          </ng-container>
-
-          <!-- Owner Column -->
-          <ng-container matColumnDef="owner">
-            <th class="w-1/3" mat-header-cell *matHeaderCellDef mat-sort-header> Właściciel </th>
-            <td class="w-1/3" mat-cell *matCellDef="let row"> {{row.owner}} </td>
-          </ng-container>
-
-          <ng-container matColumnDef="actions">
-            <th class="w-2" mat-header-cell *matHeaderCellDef></th>
-            <td class="w-2" mat-cell *matCellDef="let row">
-              <button mat-icon-button color="primary" [matMenuTriggerFor]="menu" aria-label="Menu" (click)="$event.stopPropagation(); selectedRowForMenu = row">
-                <mat-icon>menu</mat-icon>
-              </button>
-            </td>
-          </ng-container>
-
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="table-row" (click)="goToProjectTasks(row.id)"></tr>
-
-          <!-- Row shown when there is no matching data. -->
-          <tr class="mat-row" *matNoDataRow>
-            <td class="mat-cell" colspan="4">Brak projektów pasujących do filtru: "{{input.value}}"</td>
-          </tr>
-        </table>
-      </ng-container>
-
-      <mat-paginator [pageSizeOptions]="[12]" showFirstLastButtons="false" aria-label="Select page of projects"></mat-paginator>
+        </ng-container>
+      </div>
     </div>
   </div>
 </div>
-
-<mat-menu #menu="matMenu">
-  <button mat-menu-item (click)="editProject()">Edytuj projekt</button>
-  <button mat-menu-item>Usuń projekt</button>
-</mat-menu>
 
 <ng-template #loading>
   <div class="spinner-container">
     <mat-spinner></mat-spinner>
   </div>
 </ng-template>
+
+<ng-template #noProjects>
+  <div class="spinner-container">
+    <p>Nie posiadasz żadnych projektów...</p>
+  </div>
+</ng-template>
+
+<mat-menu #menu="matMenu">
+  <button mat-menu-item (click)="editProject()">
+    <mat-icon>edit</mat-icon>
+    Edytuj projekt
+  </button>
+  <button mat-menu-item (click)="deleteProject()">
+    <mat-icon>delete</mat-icon>
+    Usuń projekt
+  </button>
+  <button mat-menu-item (click)="copyProjectId()">
+    <mat-icon>content_copy</mat-icon>
+    Skopiuj ID projektu
+  </button>
+</mat-menu>
 
 

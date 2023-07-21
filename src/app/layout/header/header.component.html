@@ -6,8 +6,8 @@
     </button>
   </div>
   <div class="flex items-center space-x-4">
-    <button mat-icon-button [matMenuTriggerFor]="menu" class="p-2">
-      <mat-icon>account_circle</mat-icon>
+    <button mat-button [matMenuTriggerFor]="menu" class="p-2">
+      <app-user-info [userId]="uid"></app-user-info>
     </button>
     <mat-menu #menu="matMenu">
       <button mat-menu-item routerLink="/user">

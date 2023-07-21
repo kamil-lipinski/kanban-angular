@@ -1,19 +1,19 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from './material.module';
-import { AuthModule } from '@angular/fire/auth';
-import { AuthService } from '../auth/services/auth.service';
+import { UserInfoComponent } from './components/user-info/user-info.component';
+
 
 @NgModule({
   imports: [
     CommonModule,
     MaterialModule,
   ],
-  declarations: [],
+  declarations: [UserInfoComponent],
   exports: [
     CommonModule,
     MaterialModule,
-    AuthModule
+    UserInfoComponent
   ],
     providers: []
 })

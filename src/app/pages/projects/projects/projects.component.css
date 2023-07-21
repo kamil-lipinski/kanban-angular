@@ -1,5 +1,5 @@
 .full-height-container {
-  height: calc(100vh - 64px);
+  height: calc(auto - 64px);
 }
 
 .spinner-container {

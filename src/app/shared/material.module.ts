@@ -13,6 +13,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
+import {MatDividerModule} from '@angular/material/divider';
 
 const MATERIALEXPORT = [
   MatCardModule,
@@ -28,7 +29,8 @@ const MATERIALEXPORT = [
   MatMenuModule,
   MatTableModule,
   MatPaginatorModule,
-  MatSortModule
+  MatSortModule,
+  MatDividerModule
 ]
 
 @NgModule({

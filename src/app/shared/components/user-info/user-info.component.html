@@ -1,0 +1,12 @@
+<div class="flex items-center">
+  <ng-container *ngIf="user | async as user; else loading">
+    <img class="w-8 h-8 rounded-full mr-2" src="{{(user.photoURL) ? user.photoURL : '/assets/images/default_pp.jpg'}}" alt="Profile Picture">
+    <span>{{ user.email }}</span>
+  </ng-container>
+</div>
+
+<ng-template #loading>
+  <div class="spinner-container">
+    <mat-spinner style="width: 25px;"></mat-spinner>
+  </div>
+</ng-template>

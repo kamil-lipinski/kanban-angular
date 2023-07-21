@@ -1,3 +1,4 @@
+import { UserInfoComponent } from 'src/app/shared/components/user-info/user-info.component';
 import { AuthService } from './../../auth/services/auth.service';
 import { Component } from '@angular/core';
 
@@ -8,7 +9,12 @@ import { Component } from '@angular/core';
 })
 export class HeaderComponent {
 
-  constructor(public authService:AuthService) {}
+  public uid;
+
+  constructor(public authService:AuthService) {
+    this.uid = JSON.parse(localStorage.getItem('user')!).uid;
+  }
+
 
 
 }

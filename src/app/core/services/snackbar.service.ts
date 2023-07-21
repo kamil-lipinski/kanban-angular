@@ -16,7 +16,7 @@ export class SnackbarService {
     this.snackBar.open(message, 'Zamknij', snackBarConfig);
   }
 
-  succesSnackbar(message: string): void {
+  successSnackbar(message: string): void {
     const snackBarConfig: MatSnackBarConfig = {
       panelClass: ['succes-snackbar'],
       verticalPosition: 'top',

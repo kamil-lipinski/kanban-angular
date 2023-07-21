@@ -9,10 +9,12 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   --mdc-snackbar-container-color: rgb(220, 77, 52);
   --mdc-snackbar-supporting-text-color: white;
   --mat-snack-bar-button-color: white;
+  /* margin-top: 85px; */
 }
 
 .mat-mdc-snack-bar-container.succes-snackbar {
   --mdc-snackbar-container-color: rgb(11, 197, 70);
   --mdc-snackbar-supporting-text-color: white;
   --mat-snack-bar-button-color: white;
+  /* margin-top: 85px; */
 }
