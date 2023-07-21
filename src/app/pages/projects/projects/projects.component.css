@@ -10,6 +10,7 @@
   background-color: white;
 }
 
-td, th {
-  width: 25%;
+tr.table-row:hover {
+  background: whitesmoke;
+  cursor: pointer;
 }

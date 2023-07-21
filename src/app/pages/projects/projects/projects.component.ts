@@ -13,6 +13,7 @@ import { User } from 'src/app/shared/models/user';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-projects',
@@ -24,12 +25,20 @@ export class ProjectsComponent {
   projectId!: string;
   projects: Observable<Project[]>;
   dataSource!: MatTableDataSource<Project>;
-  displayedColumns: string[] = ['title', 'key', 'owner'];
+  displayedColumns: string[] = ['title', 'key', 'owner', 'actions'];
+  selectedRowForMenu: Project | null = null;
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private dialog: MatDialog, private store: Firestore, public authService: AuthService, private snackbar: SnackbarService) {
+  constructor
+  (
+    private dialog: MatDialog,
+    private store: Firestore,
+    public authService: AuthService,
+    private snackbar: SnackbarService,
+    private router: Router
+  ){
     this.uid = JSON.parse(localStorage.getItem('user')!).uid;
     // this.uid = this.authService.userData.uid;
 
@@ -43,9 +52,9 @@ export class ProjectsComponent {
       map((project) => project as Project[])
     );
 
-    this.projects.subscribe((projects) => {
-      this.dataSource = new MatTableDataSource(projects);
-    });
+    // this.projects.subscribe((projects) => {
+    //   this.dataSource = new MatTableDataSource(projects);
+    // });
   }
 
   newProject(): void {
@@ -120,34 +129,48 @@ export class ProjectsComponent {
     });
   }
 
-  editProject(project: Project): void {
-    const dialogRef = this.dialog.open(ProjectDialogComponent, {
-      width: '270px',
-      data: {
-        project,
-        enableDelete: true,
-      },
-    });
-    dialogRef.afterClosed().subscribe((result: ProjectDialogResult|undefined) => {
-      if (!result) {
-        return;
-      }
-      const docRef = doc(this.store, `projects/${project.id}`);
-      if (result.delete) {
-        deleteDoc(docRef);
-      } else {
-        updateDoc(docRef, { ... project });
-      }
-    });
+  editProject(): void {
+    if (this.selectedRowForMenu) {
+      const project = this.selectedRowForMenu;
+      const dialogRef = this.dialog.open(ProjectDialogComponent, {
+        width: '270px',
+        data: {
+          project,
+          enableDelete: true,
+        },
+      });
+      dialogRef.afterClosed().subscribe((result: ProjectDialogResult | undefined) => {
+        if (!result) {
+          return;
+        }
+        const docRef = doc(this.store, `projects/${project.id}`);
+        if (result.delete) {
+          deleteDoc(docRef);
+        } else {
+          updateDoc(docRef, { ...project });
+        }
+      });
+    } else {
+      console.log('No row selected for editing.');
+    }
   }
+
+
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   ngAfterViewInit() {
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
+    this.projects.subscribe((projects) => {
+      this.dataSource = new MatTableDataSource(projects);
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator; // Ensure paginator is initialized here
+    });
+  }
+
+  goToProjectTasks(projectId: string): void {
+    this.router.navigate(['/projects', projectId, 'tasks']);
   }
 
 }
