@@ -20,6 +20,14 @@
           <ng-container *ngIf="projectList.length > 0; else noProjects">
             <table mat-table [dataSource]="dataSource" matSort>
 
+              <!-- Color Column -->
+              <ng-container matColumnDef="colorCode">
+                <th class="w-1" mat-header-cell *matHeaderCellDef></th>
+                <td class="w-1" mat-cell *matCellDef="let row"> 
+                  <div class="w-5 h-5 rounded" [style.backgroundColor]="row.colorCode"></div>
+                </td>
+              </ng-container>
+
               <!-- Title Column -->
               <ng-container matColumnDef="title">
                 <th class="w-1/3" mat-header-cell *matHeaderCellDef mat-sort-header> Nazwa </th>
@@ -39,10 +47,11 @@
                   <app-user-info [userId]="row.owner"></app-user-info>
                 </td>
               </ng-container>
-
+              
+               <!-- Menu button Column -->
               <ng-container matColumnDef="actions">
-                <th class="w-2" mat-header-cell *matHeaderCellDef></th>
-                <td class="w-2" mat-cell *matCellDef="let row">
+                <th class="w-1" mat-header-cell *matHeaderCellDef></th>
+                <td class="w-1" mat-cell *matCellDef="let row">
                   <button mat-icon-button color="primary" [matMenuTriggerFor]="menu" aria-label="Menu" (click)="$event.stopPropagation(); selectedRowForMenu = row">
                     <mat-icon>menu</mat-icon>
                   </button>
@@ -92,5 +101,4 @@
     Skopiuj ID projektu
   </button>
 </mat-menu>
-
 

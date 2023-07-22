@@ -10,17 +10,16 @@ import { User } from 'src/app/shared/models/user';
 })
 export class UserInfoComponent implements OnInit {
   @Input() userId!: string;
-  @Output() userEmail = new EventEmitter<string>()
-  user!: Observable<User | undefined>
+  user!: User | undefined
 
   constructor(private userService: UserService) {} // Inject the user service
 
-  ngOnInit(): void {
-    this.user = this.userService.getUserById(this.userId); // Assign the Observable directly
-    this.user.subscribe((user) => {
-      if (user) {
-        this.userEmail.emit(user.email); // Emit the owner's email when the user data is available
-      }
-    });
+  async ngOnInit(): Promise<void> {
+    try {
+      this.user = await this.userService.getUserById(this.userId); // Get the user data using await
+    } catch (error) {
+      // Handle any errors that might occur during the getUserById call
+      console.error(error);
+    }
   }
 }

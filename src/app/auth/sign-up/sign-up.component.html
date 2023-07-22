@@ -44,7 +44,7 @@
         </div>
 
         <button mat-raised-button color="primary" class="w-full mb-4" [disabled]="!form.valid"
-        (click)="authService.SignUp(form.get('email')?.value, form.get('password')?.value)">
+        (click)="authService.SignUp(form.get('email')?.value, form.get('password')?.value)" (click)="showLoadingFunc()">
           Zarejestruj się
         </button>
       </form>
@@ -67,5 +67,12 @@
         <span>Masz już konto? <a routerLink="/sign-in" style="color: #3f51b5;">Zaloguj się</a></span>
       </div>
     </mat-card>
+    <ng-container *ngIf="showLoading; else noLoading">
+      <mat-progress-bar mode="indeterminate" style="border-radius: 50%; height: 30px;"></mat-progress-bar>
+    </ng-container>
   </div>
 </div>
+
+<ng-template #noLoading>
+  <mat-progress-bar mode="indeterminate" style="border-radius: 50%; height: 30px; visibility: hidden;"></mat-progress-bar>
+</ng-template>

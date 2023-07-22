@@ -1,4 +1,4 @@
-import { Component, Inject, ViewChild, inject } from '@angular/core';
+import { Component, Inject, QueryList, ViewChild, ViewChildren, inject } from '@angular/core';
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { MatDialog } from '@angular/material/dialog';
 import { DocumentReference, Firestore, addDoc, getDoc, collection, collectionData, deleteDoc, doc, runTransaction, updateDoc, query, where, or } from '@angular/fire/firestore';
@@ -15,6 +15,13 @@ import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 import { ConfirmationDialogComponent } from 'src/app/shared/components/confirmation-dialog/confirmation-dialog.component';
+import { UserService } from 'src/app/core/services/user.service';
+import { UserInfoComponent } from 'src/app/shared/components/user-info/user-info.component';
+
+
+interface ProjectWithOwnerEmail extends Project {
+  ownerEmail: string;
+}
 
 @Component({
   selector: 'app-projects',
@@ -25,27 +32,28 @@ export class ProjectsComponent {
   private uid: string;
   projectId!: string;
   projects: Observable<Project[]>;
-  dataSource!: MatTableDataSource<Project>;
-  displayedColumns: string[] = ['title', 'key', 'owner', 'actions'];
+  dataSource!: MatTableDataSource<ProjectWithOwnerEmail>;
+  displayedColumns: string[] = ['colorCode', 'title', 'key', 'owner', 'actions'];
   selectedRowForMenu: Project | null = null;
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor
-  (
-    private dialog: MatDialog,
-    private store: Firestore,
-    public authService: AuthService,
-    private snackbar: SnackbarService,
-    private router: Router
-  ){
+    (
+      private dialog: MatDialog,
+      private store: Firestore,
+      public authService: AuthService,
+      private snackbar: SnackbarService,
+      private router: Router,
+      private userService: UserService
+    ) {
     this.uid = JSON.parse(localStorage.getItem('user')!).uid;
     // this.uid = this.authService.userData.uid;
 
-    const projectCollection = query(collection(this.store,'projects'),
+    const projectCollection = query(collection(this.store, 'projects'),
       or(
-        where(`members.${this.uid}`, '==', true),where('owner', '==', this.uid)
+        where(`members.${this.uid}`, '==', true), where('owner', '==', this.uid)
       )
     );
 
@@ -174,7 +182,7 @@ export class ProjectsComponent {
     }
   }
 
-  copyProjectId(){
+  copyProjectId() {
     if (this.selectedRowForMenu) {
       const project = this.selectedRowForMenu;
       const projectId = project.id;
@@ -196,15 +204,72 @@ export class ProjectsComponent {
   }
 
   ngAfterViewInit() {
-    this.projects.subscribe((projects) => {
-      this.dataSource = new MatTableDataSource(projects);
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator; // Ensure paginator is initialized here
+    this.projects.subscribe(async (projects) => {
+      const projectOwners = new Set<string>();
+      projects.forEach((project) => {
+        projectOwners.add(project.owner);
+      });
+
+      // Fetch user data for project owners
+      try {
+        const ownerEmailMap = new Map<string, string>();
+        const ownerIds = Array.from(projectOwners);
+        for (const ownerId of ownerIds) {
+          const user = await this.userService.getUserById(ownerId);
+          if (user) {
+            ownerEmailMap.set(ownerId, user.email);
+          }
+        }
+
+        // Update dataSource with userEmail for each project
+        const projectsWithUserEmail: ProjectWithOwnerEmail[] = projects.map((project) => {
+          return {
+            ...project,
+            ownerEmail: ownerEmailMap.get(project.owner) || 'N/A' // 'N/A' or handle appropriately if user email is missing
+          };
+        });
+
+        this.dataSource = new MatTableDataSource(projectsWithUserEmail);
+        // Set other MatTableDataSource properties like sort and paginator
+        this.dataSource.sortData = this.sortData();
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+        this.snackbar.errorSnackbar('Error fetching user data.');
+      }
     });
   }
 
   goToProjectTasks(projectId: string): void {
     this.router.navigate(['/projects', projectId, 'tasks']);
   }
+
+  sortData() {
+    let sortFunction = (items: ProjectWithOwnerEmail[], sort: MatSort): ProjectWithOwnerEmail[] => {
+      if (!sort.active || sort.direction === '') {
+        return items;
+      }
+      return items.sort((a: ProjectWithOwnerEmail, b: ProjectWithOwnerEmail) => {
+        let comparatorResult = 0;
+        switch (sort.active) {
+          case 'title':
+            comparatorResult = a.title.localeCompare(b.title);
+            break;
+          case 'key':
+            comparatorResult = a.key.localeCompare(b.key);
+            break;
+          case 'owner':
+            comparatorResult = a.ownerEmail.localeCompare(b.ownerEmail);
+            break;
+        }
+        return comparatorResult * (sort.direction == 'asc' ? 1 : -1);
+      });
+    };
+    return sortFunction;
+  }
+  
+
+  
 
 }

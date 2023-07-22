@@ -10,6 +10,7 @@ import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 
 export class SignInComponent implements OnInit{
   hide = true;
+  showLoading = false;
   form!: FormGroup;
 
   constructor(public authService: AuthService, private formBuilder: FormBuilder) {}
@@ -19,5 +20,9 @@ export class SignInComponent implements OnInit{
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
+  }
+
+  showLoadingFunc(){
+    this.showLoading = true;
   }
 }

@@ -11,6 +11,7 @@ import { FormGroup,  FormBuilder,  Validators, AbstractControl } from '@angular/
 export class SignUpComponent implements OnInit {
   hide = true;
   hide2 = true;
+  showLoading = false;
   form!: FormGroup;
 
   constructor(public authService: AuthService, private formBuilder: FormBuilder) {}
@@ -32,5 +33,9 @@ export class SignUpComponent implements OnInit {
     }
 
     return null;
+  }
+
+  showLoadingFunc(){
+    this.showLoading = true;
   }
 }
