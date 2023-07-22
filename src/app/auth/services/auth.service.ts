@@ -11,6 +11,7 @@ import { SnackbarService } from 'src/app/core/services/snackbar.service';
 })
 
 export class AuthService {
+  showLoading = false;
   userData: any; // Save logged in user data
   constructor(
     public afs: Firestore, // Inject Firestore service
@@ -32,6 +33,11 @@ export class AuthService {
       }
     });
   }
+
+  showLoadingFunc(){
+    this.showLoading = true;
+  }
+
   // Sign in with email/password
   SignIn(email: string, password: string) {
     return auth.signInWithEmailAndPassword(this.afAuth, email, password)
@@ -40,10 +46,12 @@ export class AuthService {
         authState(this.afAuth).subscribe((user) => {
           if (user) {
             this.router.navigate(['projects']);
+            this.showLoading = false;
           }
         });
       })
       .catch((error) => {
+        this.showLoading = false;
         if(error.message == 'Firebase: Error (auth/user-not-found).'){
           this.snackBar.errorSnackbar('Użytkownik o podanym adresie E-mail nie istnieje.');
         }
@@ -63,6 +71,7 @@ export class AuthService {
         up and returns promise */
         this.SendVerificationMail();
         this.SetUserData(result.user);
+        this.showLoading = false;
       })
       .catch((error) => {
         if(error.message == 'Firebase: Error (auth/email-already-in-use).'){
@@ -72,6 +81,7 @@ export class AuthService {
           this.snackBar.errorSnackbar(`${error.message}`);
         }
       });
+      this.showLoading = false;
   }
   // Send email verfificaiton when new user sign up
   SendVerificationMail(resend: boolean = false) {
@@ -100,6 +110,7 @@ export class AuthService {
     return auth.sendPasswordResetEmail(this.afAuth,passwordResetEmail)
       .then(() => {
         this.snackBar.successSnackbar('Wiadomość E-mail z linkiem do zmiany hasła została wysłana.');
+        this.showLoading = false;
       })
       .catch((error) => {
         if(error.message == 'Firebase: Error (auth/user-not-found).' || error.message == 'Firebase: Error (auth/invalid-email).'){
@@ -108,6 +119,7 @@ export class AuthService {
         else{
           this.snackBar.errorSnackbar(`${error.message}`);
         }
+        this.showLoading = false;
       });
   }
   // Returns true when user is looged in and email is verified
