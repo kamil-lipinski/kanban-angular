@@ -27,9 +27,17 @@
           </mat-form-field>
         </div>
 
-        <button mat-raised-button color="primary" class="w-full mb-4" [disabled]="!form.valid" (click)="newProject()">Stwórz</button>
+        <button mat-raised-button color="primary" class="w-full mb-4" [disabled]="!form.valid" (click)="newProject()" (click)="showLoading=true">Stwórz</button>
+        <button mat-raised-button color="primary" class="w-full mb-4" routerLink="/projects">Anuluj</button>
       </form>
 
     </mat-card>
+    <ng-container *ngIf="showLoading; else noLoading">
+      <mat-progress-bar mode="indeterminate" style="border-radius: 50%; height: 30px;"></mat-progress-bar>
+    </ng-container>
   </div>
 </div>
+
+<ng-template #noLoading>
+  <mat-progress-bar mode="indeterminate" style="border-radius: 50%; height: 30px; visibility: hidden;"></mat-progress-bar>
+</ng-template>

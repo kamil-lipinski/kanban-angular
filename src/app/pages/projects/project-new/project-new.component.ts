@@ -13,6 +13,7 @@ import { SnackbarService } from 'src/app/core/services/snackbar.service';
 export class ProjectNewComponent implements OnInit{
   private uid: string;
   form!: FormGroup;
+  showLoading: boolean = false;
 
   constructor(
     private store: Firestore, 
@@ -63,6 +64,7 @@ export class ProjectNewComponent implements OnInit{
       const docRef = collection(this.store, 'projects');
       addDoc(docRef, projectData).then(() => {
         this.router.navigate(['projects']);
+        this.showLoading = false;
         this.snackbar.successSnackbar('Pomyślnie utworzono nowy projekt.');
       }).catch((error) => {
         this.snackbar.errorSnackbar('Podczas tworzenia projektu wystąpił błąd.'); 

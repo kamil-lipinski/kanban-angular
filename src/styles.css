@@ -19,6 +19,6 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   /* margin-top: 85px; */
 }
 
-/* .mat-mdc-paginator-page-size{
+.mat-mdc-paginator-page-size{
   visibility: hidden !important;
-} */
+}

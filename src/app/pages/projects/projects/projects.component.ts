@@ -32,7 +32,7 @@ export class ProjectsComponent {
   private uid!: string;
   projectId!: string;
   projects!: Observable<Project[]>;
-  dataSource!: MatTableDataSource<ProjectWithOwnerEmail>;
+  dataSource!: MatTableDataSource<any>;
   displayedColumns: string[] = ['colorCode', 'title', 'key', 'owner', 'actions'];
   selectedRowForMenu: Project | null = null;
 
@@ -47,26 +47,31 @@ export class ProjectsComponent {
       private snackbar: SnackbarService,
       private router: Router,
       private userService: UserService
-    ) {
+    ){
+      this.uid = JSON.parse(localStorage.getItem('user')!).uid;
+
+      const projectCollection = query(collection(this.store, 'projects'),
+        or(
+          where(`members.${this.uid}`, '==', true), where('owner', '==', this.uid)
+        )
+      );
+
+      this.projects = collectionData(projectCollection, { idField: 'id' }).pipe(
+        map((project) => project as Project[]),
+        map((project) => {
+          return project.sort((a, b) => {
+            return b.dateCreated.toMillis() - a.dateCreated.toMillis();
+          });
+        })
+      );
+
+  
   }
 
   ngOnInit(){
-    this.uid = JSON.parse(localStorage.getItem('user')!).uid;
-
-    const projectCollection = query(collection(this.store, 'projects'),
-      or(
-        where(`members.${this.uid}`, '==', true), where('owner', '==', this.uid)
-      )
-    );
-
-    this.projects = collectionData(projectCollection, { idField: 'id' }).pipe(
-      map((project) => project as Project[]),
-      map((project) => {
-        return project.sort((a, b) => {
-          return b.dateCreated.toMillis() - a.dateCreated.toMillis();
-        });
-      })
-    );
+    this.dataSource = new MatTableDataSource<any>();
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
     this.fetchProjectDataAndUpdateDataSource();
   }
 
@@ -255,7 +260,4 @@ export class ProjectsComponent {
     return sortFunction;
   }
   
-
-  
-
 }
