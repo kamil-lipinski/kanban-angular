@@ -1,7 +1,3 @@
-.full-height-container {
-  height: calc(auto - 64px);
-}
-
 .spinner-container {
   display: flex;
   justify-content: center;

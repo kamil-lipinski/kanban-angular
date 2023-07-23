@@ -1,12 +1,12 @@
 <div style="height: calc(100% - 64px); background-color: #f5f5f5;">
-  <div class="full-height-container flex justify-center text-base" style="background-color: #f5f5f5;">
+  <div class="flex justify-center text-base w-full absolute top-16" style="background-color: #f5f5f5; height: calc(100% - 64px);">
     <div class="w-3/4 mt-4">
       <div class="flex lg:items-baseline lg:justify-between lg:flex-row items-center flex-col-reverse">
         <mat-form-field>
           <input matInput (keyup)="applyFilter($event)" placeholder="Filtruj projekty..." #input>
         </mat-form-field>
         <div class="flex space-x-0 flex-col sm:flex-row sm:space-x-4">
-          <button class="mb-4 w-44" mat-raised-button color="primary" (click)="newProject()" mat-button>
+          <button class="mb-4 w-44" mat-raised-button color="primary" routerLink="/projects/new-project" mat-button>
             Stwórz projekt
           </button>
           <button class="mb-4 w-44" mat-raised-button color="primary" (click)="joinProject(projectId)">

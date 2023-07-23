@@ -1,0 +1,35 @@
+<div class="full-height-container flex items-center justify-center text-base w-full absolute top-16" style="background-color: #f5f5f5; height: calc(100% - 64px);">
+  <div class="w-2/3 md:w-1/2 xl:w-1/3">
+    <mat-card class="p-6">
+      <div class="mb-4">Nowy projekt</div>
+
+      <form [formGroup]="form" class="w-full">
+        <div class="mb-4 flex justify-center">
+          <mat-form-field [hideRequiredMarker]="true" class="w-60">
+            <mat-label>Wybierz kolor</mat-label>
+            <input matInput type="color" formControlName="colorCode" style="height: 208px;"/>
+          </mat-form-field>
+        </div>
+
+        <div class="mb-4">
+          <mat-form-field class="w-full">
+            <input matInput placeholder="Nazwa projektu" type="text" formControlName="title" />
+            <mat-error *ngIf="form.get('title')!.hasError('required')">Wymagana nazwa</mat-error>
+            <mat-error *ngIf="form.get('title')!.hasError('minlength')">Nazwa musi składać się z co najmniej 6 znaków</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="mb-4">
+          <mat-form-field class="w-full">
+            <input matInput placeholder="Skrót" type="text" formControlName="key" />
+            <mat-error *ngIf="form.get('key')!.hasError('required')">Wymagany skrót</mat-error>
+            <mat-error *ngIf="form.get('key')!.hasError('maxlength')">Skrót może składać się maksymalnie z 4 znaków</mat-error>
+          </mat-form-field>
+        </div>
+
+        <button mat-raised-button color="primary" class="w-full mb-4" [disabled]="!form.valid" (click)="newProject()">Stwórz</button>
+      </form>
+
+    </mat-card>
+  </div>
+</div>

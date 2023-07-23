@@ -18,3 +18,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   --mat-snack-bar-button-color: white;
   /* margin-top: 85px; */
 }
+
+/* .mat-mdc-paginator-page-size{
+  visibility: hidden !important;
+} */

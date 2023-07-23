@@ -29,9 +29,9 @@ interface ProjectWithOwnerEmail extends Project {
   styleUrls: ['./projects.component.css']
 })
 export class ProjectsComponent {
-  private uid: string;
+  private uid!: string;
   projectId!: string;
-  projects: Observable<Project[]>;
+  projects!: Observable<Project[]>;
   dataSource!: MatTableDataSource<ProjectWithOwnerEmail>;
   displayedColumns: string[] = ['colorCode', 'title', 'key', 'owner', 'actions'];
   selectedRowForMenu: Project | null = null;
@@ -48,8 +48,10 @@ export class ProjectsComponent {
       private router: Router,
       private userService: UserService
     ) {
+  }
+
+  ngOnInit(){
     this.uid = JSON.parse(localStorage.getItem('user')!).uid;
-    // this.uid = this.authService.userData.uid;
 
     const projectCollection = query(collection(this.store, 'projects'),
       or(
@@ -65,31 +67,7 @@ export class ProjectsComponent {
         });
       })
     );
-
-  }
-
-  newProject(): void {
-    const dialogRef = this.dialog.open(ProjectDialogComponent, {
-      width: '300px',
-      data: {
-        project: {},
-      },
-    });
-    dialogRef
-      .afterClosed()
-      .subscribe((result) => {
-        if (!result) {
-          return;
-        }
-        const timestamp = Timestamp.now();
-        const projectData = {
-          ...result.project,
-          dateCreated: timestamp, 
-          owner: this.authService.userData.uid,
-        };
-        const docRef = collection(this.store, 'projects');
-        addDoc(docRef, projectData);
-      });
+    this.fetchProjectDataAndUpdateDataSource();
   }
 
   doJoinProject(projectId: string): void {
@@ -211,7 +189,7 @@ export class ProjectsComponent {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  ngAfterViewInit() {
+  fetchProjectDataAndUpdateDataSource() {
     this.projects.subscribe(async (projects) => {
       const projectOwners = new Set<string>();
       projects.forEach((project) => {
