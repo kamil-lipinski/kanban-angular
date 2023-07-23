@@ -65,6 +65,7 @@ export class AuthService {
   }
   // Sign up with email/password
   SignUp(email: string, password: string) {
+    debugger
     auth.createUserWithEmailAndPassword(this.afAuth, email, password)
       .then((result) => {
         /* Call the SendVerificaitonMail() function when new user sign
@@ -76,6 +77,9 @@ export class AuthService {
       .catch((error) => {
         if(error.message == 'Firebase: Error (auth/email-already-in-use).'){
           this.snackBar.errorSnackbar('Użytkownik o podanym adresie E-mail już istnieje.');
+        }
+        else if(error.message == 'Firebase: Error (auth/invalid-email).'){
+          this.snackBar.errorSnackbar('Niepoprawny E-mail.');
         }
         else{
           this.snackBar.errorSnackbar(`${error.message}`);

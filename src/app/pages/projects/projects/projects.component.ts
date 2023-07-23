@@ -1,9 +1,9 @@
 import { Component, Inject, QueryList, ViewChild, ViewChildren, inject } from '@angular/core';
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { MatDialog } from '@angular/material/dialog';
-import { DocumentReference, Firestore, addDoc, getDoc, collection, collectionData, deleteDoc, doc, runTransaction, updateDoc, query, where, or } from '@angular/fire/firestore';
+import { DocumentReference, Firestore, addDoc, getDoc, collection, collectionData, deleteDoc, doc, runTransaction, updateDoc, query, where, or, Timestamp, orderBy } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, timestamp } from 'rxjs/operators';
 import { Project } from 'src/app/shared/models/project';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { AuthService } from 'src/app/auth/services/auth.service';
@@ -58,7 +58,12 @@ export class ProjectsComponent {
     );
 
     this.projects = collectionData(projectCollection, { idField: 'id' }).pipe(
-      map((project) => project as Project[])
+      map((project) => project as Project[]),
+      map((project) => {
+        return project.sort((a, b) => {
+          return b.dateCreated.toMillis() - a.dateCreated.toMillis();
+        });
+      })
     );
 
   }
@@ -76,8 +81,10 @@ export class ProjectsComponent {
         if (!result) {
           return;
         }
+        const timestamp = Timestamp.now();
         const projectData = {
           ...result.project,
+          dateCreated: timestamp, 
           owner: this.authService.userData.uid,
         };
         const docRef = collection(this.store, 'projects');
@@ -125,7 +132,7 @@ export class ProjectsComponent {
 
   joinProject(projectId: string): void {
     const dialogRef = this.dialog.open(ProjectDialogJoinComponent, {
-      width: '30%',
+      width: '300px',
       data: { projectId: projectId }
     });
 
@@ -149,8 +156,9 @@ export class ProjectsComponent {
         if (!result) {
           return;
         }
+        delete result.project.ownerEmail;
         const docRef = doc(this.store, `projects/${project.id}`);
-        updateDoc(docRef, { ...project });
+        updateDoc(docRef, { ...result.project });
       });
     } else {
       console.log('No row selected for editing.');
