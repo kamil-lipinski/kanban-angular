@@ -1,5 +1,5 @@
-<div style="height: calc(100% - 64px); background-color: #f5f5f5;">
-  <div class="flex justify-center text-base w-full absolute top-16" style="background-color: #f5f5f5; height: calc(100% - 64px);">
+<div class="absolute top-16 w-full" style="height: calc(100% - 64px); background-color: #f5f5f5;">
+  <div class="flex justify-center text-base w-full" style="background-color: #f5f5f5; height: full">
     <div class="w-3/4 mt-4">
       <div class="flex lg:items-baseline lg:justify-between lg:flex-row items-center flex-col-reverse">
         <mat-form-field>
@@ -25,7 +25,7 @@
                 <!-- Color Column -->
                 <ng-container matColumnDef="colorCode">
                   <th class="w-1" mat-header-cell *matHeaderCellDef></th>
-                  <td class="w-1" mat-cell *matCellDef="let row"> 
+                  <td class="w-1" mat-cell *matCellDef="let row">
                     <div class="w-5 h-5 rounded" [style.backgroundColor]="row.colorCode"></div>
                   </td>
                 </ng-container>
@@ -49,7 +49,7 @@
                     <app-user-info [userId]="row.owner"></app-user-info>
                   </td>
                 </ng-container>
-                
+
                 <!-- Menu button Column -->
                 <ng-container matColumnDef="actions">
                   <th class="w-1" mat-header-cell *matHeaderCellDef></th>
