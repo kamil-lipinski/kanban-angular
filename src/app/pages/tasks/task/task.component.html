@@ -1,5 +1,5 @@
-<mat-card class="item" *ngIf="task" (dblclick)="edit.emit(task)">
+<mat-card class="item" *ngIf="task" (click)="edit.emit(task)">
   <h2>{{ task.title }}</h2>
   <p>{{ task.description }}</p>
-  <p>Utworzone: {{ task.dateCreated | dateFormat }}</p>
+  <p>Do kiedy: {{ task.dueTo | dateFormat }}</p>
 </mat-card>

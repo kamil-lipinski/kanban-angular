@@ -15,6 +15,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatNativeDateModule} from '@angular/material/core';
+import {MatDatepickerModule} from '@angular/material/datepicker';
 
 const MATERIALEXPORT = [
   MatCardModule,
@@ -32,7 +34,9 @@ const MATERIALEXPORT = [
   MatPaginatorModule,
   MatSortModule,
   MatDividerModule,
-  MatProgressBarModule
+  MatProgressBarModule,
+  MatDatepickerModule,
+  MatNativeDateModule
 ]
 
 @NgModule({

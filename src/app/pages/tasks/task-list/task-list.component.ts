@@ -72,17 +72,20 @@ export class TaskListComponent{
         if (!result) {
           return;
         }
-        result.task.dateCreated = Timestamp.now();
         const docRef = doc(this.store, 'projects', this.projectId);
         addDoc(collection(docRef, 'todo'), result.task);
       });
   }
 
   editTask(list: 'done' | 'todo' | 'inProgress', task: Task): void {
+    const taskWithDate = {
+      ...task,
+      dueTo: task.dueTo.toDate(), // Convert the Firestore Timestamp to a JavaScript Date
+    }; 
     const dialogRef = this.dialog.open(TaskDialogComponent, {
-      width: '270px',
+      width: '30%',
       data: {
-        task,
+        task: taskWithDate,
         enableDelete: true,
       },
     });

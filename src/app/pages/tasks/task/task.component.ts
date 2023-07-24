@@ -1,6 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Task } from '../../../shared/models/task';
-import { DateFormatPipe } from 'src/app/shared/pipes/date-format.pipe';
 
 @Component({
   selector: 'app-task',
