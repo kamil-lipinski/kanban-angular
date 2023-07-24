@@ -128,7 +128,7 @@ export class ProjectsComponent {
   editProject(): void {
     if (this.selectedRowForMenu) {
       const project = this.selectedRowForMenu;
-      this.router.navigate(['/projects', project.id, 'edit'], { state: { project: project } });
+      this.router.navigate(['/projects', project.id, 'edit']);
     } else {
       console.log('No row selected for editing.');
     }

@@ -10,26 +10,36 @@ import { ProjectsComponent } from './projects/projects.component';
 import { ProjectDialogJoinComponent } from './project-dialog-join/project-dialog-join.component';
 import { ProjectNewComponent } from './project-new/project-new.component';
 import { ProjectEditComponent } from './project-edit/project-edit.component';
+import { ProjectMemberGuard } from 'src/app/auth/guard/project-member.guard';
+import { BreadcrumbModule } from 'xng-breadcrumb';
 
 const routes: Routes = [
-  { path: '', component: ProjectsComponent },
-  { path: 'new-project', component: ProjectNewComponent },
-  { path: ':projectId/edit', component: ProjectEditComponent }
+  {
+    path: '',
+    data: { breadcrumb: { alias: 'projects' } },
+    children: [
+      { path: '', component: ProjectsComponent },
+      { path: 'new-project', component: ProjectNewComponent, data: { breadcrumb: { alias: 'new-project' } } },
+      { path: ':projectId/edit', component: ProjectEditComponent, canActivate:[ProjectMemberGuard], data: { breadcrumb: { alias: 'edit' } } }
+    ]
+  },
 ];
+
 
 @NgModule({
   declarations: [
     ProjectsComponent,
     ProjectDialogJoinComponent,
     ProjectNewComponent,
-    ProjectEditComponent
+    ProjectEditComponent,
   ],
   imports: [
     CommonModule,
     SharedModule,
     FormsModule,
     RouterModule.forChild(routes),
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    BreadcrumbModule
   ],
   exports: [RouterModule],
   providers: []

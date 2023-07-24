@@ -16,6 +16,7 @@ import { CoreModule } from './core/core.module';
 import { TaskModule } from './pages/tasks/task.module';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { ConfirmationDialogComponent } from './shared/components/confirmation-dialog/confirmation-dialog.component';
+import { BreadcrumbModule, BreadcrumbService } from 'xng-breadcrumb';
 
 @NgModule({
   declarations: [
@@ -33,9 +34,10 @@ import { ConfirmationDialogComponent } from './shared/components/confirmation-di
     AppRoutingModule,
     AuthModule,
     SharedModule,
-    CoreModule
+    CoreModule,
+    BreadcrumbModule
   ],
-  providers: [SnackbarService],
+  providers: [SnackbarService, BreadcrumbService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

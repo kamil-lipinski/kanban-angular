@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Firestore, Timestamp, doc, updateDoc } from '@angular/fire/firestore';
+import { Firestore, Timestamp, doc, getDoc, updateDoc } from '@angular/fire/firestore';
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
@@ -32,20 +32,29 @@ export class ProjectEditComponent implements OnInit {
       this.projectId = params['projectId'];
     });
 
-    this.project = history.state.project;
+    const projectRef = doc(this.store, 'projects', this.projectId);
+    getDoc(projectRef).then((projectSnapshot) => {
+      if (projectSnapshot.exists()) {
+        this.project = projectSnapshot.data() as Project;
+        this.initialFormValues = {
+          title: this.project.title,
+          key: this.project.key,
+          colorCode: this.project.colorCode
+        };
 
-    this.initialFormValues = {
-      title: this.project.title,
-      key: this.project.key,
-      colorCode: this.project.colorCode
-    };
-
-    this.form = this.formBuilder.group({
-      title: [this.project.title, [Validators.required, Validators.minLength(6)]],
-      key: [this.project.key, [Validators.required, Validators.maxLength(4), this.capitalizeLetters]],
-      colorCode: [this.project.colorCode, [Validators.required]]
-    }, {
-      validator: this.anyFieldChangedValidator()
+        this.form = this.formBuilder.group({
+          title: [this.project.title, [Validators.required, Validators.minLength(6)]],
+          key: [this.project.key, [Validators.required, Validators.maxLength(4), this.capitalizeLetters]],
+          colorCode: [this.project.colorCode, [Validators.required]]
+        }, {
+          validator: this.anyFieldChangedValidator()
+        });
+      } else {
+        console.error('Project does not exist.');
+      }
+    })
+    .catch((error) => {
+      console.error('Error fetching project:', error);
     });
   }
 

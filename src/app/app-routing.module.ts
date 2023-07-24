@@ -13,7 +13,7 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 const routes: Routes = [
   { path: '', component: MainComponent, canActivate:[AuthGuard], children:[
     { path: '', redirectTo: '/projects', pathMatch: 'full' },
-    { path: 'projects', loadChildren: () => import('./pages/projects/projects.module').then(m => m.ProjectsModule)},
+    { path: 'projects', loadChildren: () => import('./pages/projects/projects.module').then(m => m.ProjectsModule), data: {breadcrumb: { skip: false }}},
     { path: 'projects/:projectId/tasks', loadChildren: () => import('./pages/tasks/task.module').then(m => m.TaskModule), canActivate:[ProjectMemberGuard]},
     { path: 'user', loadChildren: () => import('./pages/user/user.module').then(m => m.UserModule)},
   ] },

@@ -6,5 +6,6 @@ export interface Project {
   title: string;
   key: string;
   colorCode: string;
-  dateCreated: Timestamp
+  dateCreated: Timestamp;
+  members: Map<string, boolean>;
 }
