@@ -1,13 +1,13 @@
 <h2 mat-dialog-title class="mb-4 text-center">Wprowadź ID projektu</h2>
 <div mat-dialog-content>
   <mat-form-field class="w-full">
-    <input matInput [(ngModel)]="data.projectId" required>
+    <input matInput placeholder="ID projektu" [(ngModel)]="data.projectId" required>
     <mat-error *ngIf="!data.projectId">ID projektu jest wymagane</mat-error>
   </mat-form-field>
 </div>
 <div class="flex justify-center">
   <div mat-dialog-actions>
-    <button mat-button [mat-dialog-close]="data" [disabled]="!data.projectId">Join</button>
-    <button mat-button (click)="cancel()">Cancel</button>
+    <button mat-button [mat-dialog-close]="data" [disabled]="!data.projectId">Dołącz</button>
+    <button mat-button (click)="cancel()">Anuluj</button>
   </div>
 </div>

@@ -1,10 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { SharedModule } from 'src/app/shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AuthService } from 'src/app/auth/services/auth.service';
-import { AuthModule } from '@angular/fire/auth';
 import { RouterModule, Routes } from '@angular/router';
 import { ProjectsComponent } from './projects/projects.component';
 import { ProjectDialogJoinComponent } from './project-dialog-join/project-dialog-join.component';

@@ -63,10 +63,13 @@
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="table-row" (click)="goToProjectTasks(row.id)"></tr>
 
-                <!-- Row shown when there is no matching data. -->
-                <tr style="height: 52px; text-align: center;" *matNoDataRow>
-                  <td class="mat-cell" colspan="5">Brak projektów pasujących do filtru: "{{input.value}}"</td>
-                </tr>
+                <ng-container *ngIf="!showLoading; else loading">
+                  <!-- Row shown when there is no matching data. -->
+                  <tr style="height: 52px; text-align: center;" *matNoDataRow>
+                    <td class="mat-cell" colspan="5">Brak projektów pasujących do filtru: "{{input.value}}"</td>
+                  </tr>
+                </ng-container>
+
               </table>
               <mat-divider></mat-divider>
               <mat-paginator [pageSizeOptions]="[12]" showFirstLastButtons="false" aria-label="Select page of projects"></mat-paginator>

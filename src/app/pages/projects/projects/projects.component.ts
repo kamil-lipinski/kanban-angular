@@ -1,22 +1,18 @@
-import { Component, Inject, Input, QueryList, ViewChild, ViewChildren, inject } from '@angular/core';
-import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
+import { Component, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { DocumentReference, Firestore, addDoc, getDoc, collection, collectionData, deleteDoc, doc, runTransaction, updateDoc, query, where, or, Timestamp, orderBy } from '@angular/fire/firestore';
+import { Firestore, getDoc, collection, collectionData, deleteDoc, doc, updateDoc, query, where, or } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
-import { map, timestamp } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { Project } from 'src/app/shared/models/project';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { ProjectDialogJoinComponent } from '../project-dialog-join/project-dialog-join.component';
-import { User } from 'src/app/shared/models/user';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
-import { NavigationExtras, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { ConfirmationDialogComponent } from 'src/app/shared/components/confirmation-dialog/confirmation-dialog.component';
 import { UserService } from 'src/app/core/services/user.service';
-import { UserInfoComponent } from 'src/app/shared/components/user-info/user-info.component';
-
 
 interface ProjectWithOwnerEmail extends Project {
   ownerEmail: string;
@@ -34,6 +30,7 @@ export class ProjectsComponent {
   dataSource!: MatTableDataSource<any>;
   displayedColumns: string[] = ['colorCode', 'title', 'key', 'owner', 'actions'];
   selectedRowForMenu: Project | null = null;
+  showLoading: Boolean = true;
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -47,6 +44,7 @@ export class ProjectsComponent {
       private router: Router,
       private userService: UserService
     ){
+
       this.uid = JSON.parse(localStorage.getItem('user')!).uid;
 
       const projectCollection = query(collection(this.store, 'projects'),
@@ -90,7 +88,7 @@ export class ProjectsComponent {
 
         // Check if the user is already a member
         if (existingMembers.hasOwnProperty(this.uid) || owner === this.uid) {
-          this.snackbar.errorSnackbar('You are already a member of this project');
+          this.snackbar.errorSnackbar('Należysz już do tego projektu.');
           return;
         }
 
@@ -101,13 +99,13 @@ export class ProjectsComponent {
 
         updateDoc(projectRef, { members: updatedMembers })
           .then(() => {
-            this.snackbar.successSnackbar('Joined the project successfully.');
+            this.snackbar.successSnackbar('Pomyślnie dołączono do projektu.');
           })
           .catch((error) => {
-            this.snackbar.errorSnackbar('Error joining the project.');
+            this.snackbar.errorSnackbar('W trakcie dołączania do projektu wystąpił błąd.');
           });
       } else {
-        this.snackbar.errorSnackbar('Project does not exist.');
+        this.snackbar.errorSnackbar('Projekt o podanym ID nie istnieje.');
       }
     });
   }
@@ -147,10 +145,10 @@ export class ProjectsComponent {
           const docRef = doc(this.store, `projects/${project.id}`);
           deleteDoc(docRef)
             .then(() => {
-              this.snackbar.successSnackbar('Project deleted successfully.');
+              this.snackbar.successSnackbar('Pomyślnie usunięto projekt.');
             })
             .catch((error) => {
-              this.snackbar.errorSnackbar('Error deleting the project.');
+              this.snackbar.errorSnackbar('Podczas usuwania projektu wystąpił błąd.');
             });
         }
       });
@@ -211,9 +209,10 @@ export class ProjectsComponent {
         this.dataSource.sortData = this.sortData();
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
+        this.showLoading = false;
       } catch (error) {
         console.error('Error fetching user data:', error);
-        this.snackbar.errorSnackbar('Error fetching user data.');
+        this.snackbar.errorSnackbar('Wystąpił pobierania danych wystąpił błąd.');
       }
     });
   }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Firestore, Timestamp, doc, getDoc, updateDoc } from '@angular/fire/firestore';
+import { Firestore, doc, getDoc, updateDoc } from '@angular/fire/firestore';
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
@@ -50,11 +50,11 @@ export class ProjectEditComponent implements OnInit {
           validator: this.anyFieldChangedValidator()
         });
       } else {
-        console.error('Project does not exist.');
+        console.error('Projekt nie istnieje.');
       }
     })
     .catch((error) => {
-      console.error('Error fetching project:', error);
+      console.error('Wystąpił błąd:', error);
     });
   }
 

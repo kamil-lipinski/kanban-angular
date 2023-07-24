@@ -1,5 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, Input, OnInit } from '@angular/core';
 import { UserService } from 'src/app/core/services/user.service';
 import { User } from 'src/app/shared/models/user';
 

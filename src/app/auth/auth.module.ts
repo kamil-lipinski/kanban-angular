@@ -6,8 +6,6 @@ import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { provideAuth,getAuth } from '@angular/fire/auth';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { AuthService } from './services/auth.service';
-import { AuthGuard } from './guard/auth.guard';
 import { RouterModule } from '@angular/router';
 
 
