@@ -1,4 +1,4 @@
-import { Component, Inject, QueryList, ViewChild, ViewChildren, inject } from '@angular/core';
+import { Component, Inject, Input, QueryList, ViewChild, ViewChildren, inject } from '@angular/core';
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { MatDialog } from '@angular/material/dialog';
 import { DocumentReference, Firestore, addDoc, getDoc, collection, collectionData, deleteDoc, doc, runTransaction, updateDoc, query, where, or, Timestamp, orderBy } from '@angular/fire/firestore';
@@ -13,7 +13,7 @@ import { User } from 'src/app/shared/models/user';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { ConfirmationDialogComponent } from 'src/app/shared/components/confirmation-dialog/confirmation-dialog.component';
 import { UserService } from 'src/app/core/services/user.service';
 import { UserInfoComponent } from 'src/app/shared/components/user-info/user-info.component';
@@ -65,7 +65,7 @@ export class ProjectsComponent {
         })
       );
 
-  
+
   }
 
   ngOnInit(){
@@ -129,20 +129,7 @@ export class ProjectsComponent {
   editProject(): void {
     if (this.selectedRowForMenu) {
       const project = this.selectedRowForMenu;
-      const dialogRef = this.dialog.open(ProjectDialogComponent, {
-        width: '300px',
-        data: {
-          project,
-        },
-      });
-      dialogRef.afterClosed().subscribe((result) => {
-        if (!result) {
-          return;
-        }
-        delete result.project.ownerEmail;
-        const docRef = doc(this.store, `projects/${project.id}`);
-        updateDoc(docRef, { ...result.project });
-      });
+      this.router.navigate(['/projects', project.id, 'edit'], { state: { project: project } });
     } else {
       console.log('No row selected for editing.');
     }
@@ -259,5 +246,5 @@ export class ProjectsComponent {
     };
     return sortFunction;
   }
-  
+
 }

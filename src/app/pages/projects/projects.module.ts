@@ -10,10 +10,12 @@ import { ProjectDialogComponent } from './project-dialog/project-dialog.componen
 import { ProjectsComponent } from './projects/projects.component';
 import { ProjectDialogJoinComponent } from './project-dialog-join/project-dialog-join.component';
 import { ProjectNewComponent } from './project-new/project-new.component';
+import { ProjectEditComponent } from './project-edit/project-edit.component';
 
 const routes: Routes = [
   { path: '', component: ProjectsComponent },
-  { path: 'new-project', component: ProjectNewComponent }
+  { path: 'new-project', component: ProjectNewComponent },
+  { path: ':projectId/edit', component: ProjectEditComponent }
 ];
 
 @NgModule({
@@ -21,7 +23,8 @@ const routes: Routes = [
     ProjectsComponent,
     ProjectDialogComponent,
     ProjectDialogJoinComponent,
-    ProjectNewComponent
+    ProjectNewComponent,
+    ProjectEditComponent
   ],
   imports: [
     CommonModule,
