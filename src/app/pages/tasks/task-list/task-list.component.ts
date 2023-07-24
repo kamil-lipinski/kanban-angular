@@ -2,9 +2,9 @@ import { Component, Inject, inject, OnInit } from '@angular/core';
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { MatDialog } from '@angular/material/dialog';
 import { TaskDialogComponent, TaskDialogResult } from '../task-dialog/task-dialog.component';
-import { DocumentReference, Firestore, addDoc, collection, collectionData, deleteDoc, doc, runTransaction, updateDoc } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { DocumentReference, Firestore, Timestamp, addDoc, collection, collectionData, deleteDoc, doc, runTransaction, updateDoc } from '@angular/fire/firestore';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { Task } from 'src/app/shared/models/task';
@@ -18,9 +18,13 @@ export class TaskListComponent{
 
   public projectId!: string;
 
-  todo!: Observable<Task[]>;
-  inProgress!: Observable<Task[]>;
-  done!: Observable<Task[]>;
+  loadingTodo: boolean = true;
+  loadingInProgress: boolean = true;
+  loadingDone: boolean = true;
+
+  todo: BehaviorSubject<Task[]> = new BehaviorSubject<Task[]>([]);
+  inProgress: BehaviorSubject<Task[]> = new BehaviorSubject<Task[]>([]);
+  done: BehaviorSubject<Task[]> = new BehaviorSubject<Task[]>([]);
 
   constructor(private dialog: MatDialog, private store: Firestore, public authService: AuthService, private route: ActivatedRoute) {}
 
@@ -33,17 +37,26 @@ export class TaskListComponent{
     const inProgressCollection = collection(doc(this.store, 'projects', this.projectId), 'inProgress');
     const doneCollection = collection(doc(this.store, 'projects', this.projectId), 'done');
 
-    this.todo = collectionData(todoCollection, { idField: 'id' }).pipe(
-      map((tasks) => tasks as Task[])
-    );
+    collectionData(todoCollection, { idField: 'id' }).pipe(
+      tap((tasks) => {
+        this.todo.next(tasks as Task[]);
+        this.loadingTodo = false;
+      })
+    ).subscribe();
 
-    this.inProgress = collectionData(inProgressCollection, { idField: 'id' }).pipe(
-      map((tasks) => tasks as Task[])
-    );
+    collectionData(inProgressCollection, { idField: 'id' }).pipe(
+      tap((tasks) => {
+        this.inProgress.next(tasks as Task[]);
+        this.loadingInProgress = false;
+      })
+    ).subscribe();
 
-    this.done = collectionData(doneCollection, { idField: 'id' }).pipe(
-      map((tasks) => tasks as Task[])
-    );
+    collectionData(doneCollection, { idField: 'id' }).pipe(
+      tap((tasks) => {
+        this.done.next(tasks as Task[]);
+        this.loadingDone = false;
+      })
+    ).subscribe();
   }
 
   newTask(): void {
@@ -59,6 +72,7 @@ export class TaskListComponent{
         if (!result) {
           return;
         }
+        result.task.dateCreated = Timestamp.now();
         const docRef = doc(this.store, 'projects', this.projectId);
         addDoc(collection(docRef, 'todo'), result.task);
       });

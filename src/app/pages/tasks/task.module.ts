@@ -5,6 +5,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { TaskDialogComponent } from './task-dialog/task-dialog.component';
 import { TaskListComponent } from './task-list/task-list.component';
 import { TaskComponent } from './task/task.component';
+import { BreadcrumbModule } from 'xng-breadcrumb';
+import { DateFormatPipe } from 'src/app/shared/pipes/date-format.pipe';
 
 
 const routes: Routes = [
@@ -16,12 +18,13 @@ const routes: Routes = [
     TaskComponent,
     TaskDialogComponent,
     TaskListComponent,
+    DateFormatPipe
   ],
   imports: [
     SharedModule,
-    // BrowserAnimationsModule,
     FormsModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    BreadcrumbModule
   ],
   exports: [RouterModule],
   providers: []

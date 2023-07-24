@@ -17,7 +17,12 @@ const routes: Routes = [
     children: [
       { path: '', component: ProjectsComponent },
       { path: 'new-project', component: ProjectNewComponent, data: { breadcrumb: { alias: 'new-project' } } },
-      { path: ':projectId/edit', component: ProjectEditComponent, canActivate:[ProjectMemberGuard], data: { breadcrumb: { alias: 'edit' } } }
+      { path: ':projectId/edit', component: ProjectEditComponent, canActivate:[ProjectMemberGuard],data: { breadcrumb: { alias: 'edit' } } },
+      { path: ':projectId/tasks', 
+        loadChildren: () => import('../tasks/task.module').then(m => m.TaskModule), 
+        canActivate:[ProjectMemberGuard], 
+        data: { breadcrumb: { alias: 'tasks' } }
+      },
     ]
   },
 ];
