@@ -7,7 +7,6 @@ import { map, timestamp } from 'rxjs/operators';
 import { Project } from 'src/app/shared/models/project';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { AuthService } from 'src/app/auth/services/auth.service';
-import { ProjectDialogComponent } from '../project-dialog/project-dialog.component';
 import { ProjectDialogJoinComponent } from '../project-dialog-join/project-dialog-join.component';
 import { User } from 'src/app/shared/models/user';
 import { MatTableDataSource } from '@angular/material/table';
