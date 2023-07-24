@@ -1,13 +1,18 @@
 <div class="absolute top-16 w-full" style="height: calc(100% - 64px); background-color: #f5f5f5;">
   <div class="flex justify-center text-base w-full" style="background-color: #f5f5f5; height: full">
-    <div class="content-wrapper">
-      <button (click)="newTask()" mat-button>
-        <mat-icon>add</mat-icon> Add Task
-      </button>
+    <div class="w-3/4 mt-4">
+      <div class="flex sm:items-baseline sm:justify-between sm:flex-row items-center flex-col-reverse">
+        <mat-form-field>
+          <input matInput placeholder="Filtruj zadania..." #input>
+        </mat-form-field>
+        <button class="mb-4 w-44" mat-raised-button color="primary" (click)="newTask()" mat-button>
+          Nowe zadanie
+        </button>
+      </div>
 
-      <div class="container-wrapper">
-        <div class="container">
-          <h2>Backlog</h2>
+      <div class="flex justify-between">
+        <div style="width: 30%;">
+          <h2>Do zrobienia</h2>
 
           <mat-card
             cdkDropList
@@ -17,13 +22,15 @@
             [cdkDropListConnectedTo]="[doneList, inProgressList]"
             (cdkDropListDropped)="drop($event)"
             class="list">
-            <p class="empty-label" *ngIf="(todo | async)?.length === 0">Empty list</p>
+            <div *ngIf="(todo | async)?.length === 0" class="flex items-center justify-center" style="height: 134px;">
+              <p class="empty-label">Brak zadań</p>
+            </div>
             <app-task (edit)="editTask('todo', $event)" *ngFor="let task of todo | async" cdkDrag [task]="task"></app-task>
           </mat-card>
         </div>
 
-        <div class="container">
-          <h2>In progress</h2>
+        <div style="width: 30%;">
+          <h2>W trakcie</h2>
 
           <mat-card
             cdkDropList
@@ -33,13 +40,15 @@
             [cdkDropListConnectedTo]="[todoList, doneList]"
             (cdkDropListDropped)="drop($event)"
             class="list">
-            <p class="empty-label" *ngIf="(inProgress | async)?.length === 0">Empty list</p>
+            <div *ngIf="(inProgress | async)?.length === 0" class="flex items-center justify-center" style="height: 134px;">
+              <p class="empty-label">Brak zadań</p>
+            </div>
             <app-task (edit)="editTask('inProgress', $event)" *ngFor="let task of inProgress | async" cdkDrag [task]="task"></app-task>
           </mat-card>
         </div>
 
-        <div class="container">
-          <h2>Done</h2>
+        <div style="width: 30%;">
+          <h2>Ukończone</h2>
 
           <mat-card
             cdkDropList
@@ -49,7 +58,9 @@
             [cdkDropListConnectedTo]="[todoList, inProgressList]"
             (cdkDropListDropped)="drop($event)"
             class="list">
-            <p class="empty-label" *ngIf="(done | async)?.length === 0">Empty list</p>
+            <div *ngIf="(done | async)?.length === 0" class="flex items-center justify-center" style="height: 134px;">
+              <p class="empty-label">Brak zadań</p>
+            </div>
             <app-task (edit)="editTask('done', $event)" *ngFor="let task of done | async" cdkDrag [task]="task"></app-task>
           </mat-card>
         </div>

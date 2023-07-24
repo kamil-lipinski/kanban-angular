@@ -1,35 +1,24 @@
-mat-toolbar {
+/* mat-toolbar {
   margin-bottom: 20px;
 }
 
 mat-toolbar > span {
   margin-left: 10px;
-}
-
-.content-wrapper {
-  max-width: 1400px;
-  margin: auto;
-}
-
-.container-wrapper {
-  display: flex;
-  justify-content: space-around;
-}
-
-.container {
-  width: 400px;
-  margin: 0 25px 25px 0;
-}
+} */
 
 .list {
-  border: solid 1px #ccc;
-  min-height: 100px;
+  min-height: 134px;
+  max-height: calc(100vh - 280px);
   border-radius: 4px;
+  background-color: white;
+  overflow-y: auto;
 }
 
-app-new-task {
+/* app-new-task {
   margin-bottom: 30px;
 }
+
+*/
 
 .empty-label {
   font-size: 2em;
