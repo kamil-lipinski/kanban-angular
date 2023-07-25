@@ -2,12 +2,14 @@ import { Component, Inject, inject, OnInit } from '@angular/core';
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { MatDialog } from '@angular/material/dialog';
 import { TaskDialogComponent, TaskDialogResult } from '../task-dialog/task-dialog.component';
-import { DocumentReference, Firestore, Timestamp, addDoc, collection, collectionData, deleteDoc, doc, runTransaction, updateDoc } from '@angular/fire/firestore';
+import { DocumentReference, Firestore, Timestamp, addDoc, collection, collectionData, deleteDoc, doc, getDoc, runTransaction, updateDoc } from '@angular/fire/firestore';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { Task } from 'src/app/shared/models/task';
+import { Project } from 'src/app/shared/models/project';
+import { TaskDetailsDialogComponent } from '../task-details-dialog/task-details-dialog.component';
 
 @Component({
   selector: 'app-task-list',
@@ -17,6 +19,8 @@ import { Task } from 'src/app/shared/models/task';
 export class TaskListComponent{
 
   public projectId!: string;
+  project!: Project;
+  uid!: string;
 
   loadingTodo: boolean = true;
   loadingInProgress: boolean = true;
@@ -26,11 +30,25 @@ export class TaskListComponent{
   inProgress: BehaviorSubject<Task[]> = new BehaviorSubject<Task[]>([]);
   done: BehaviorSubject<Task[]> = new BehaviorSubject<Task[]>([]);
 
-  constructor(private dialog: MatDialog, private store: Firestore, public authService: AuthService, private route: ActivatedRoute) {}
+  constructor(private dialog: MatDialog, private store: Firestore, public authService: AuthService, private route: ActivatedRoute) {
+    this.uid = JSON.parse(localStorage.getItem('user')!).uid;
+  }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.projectId = params['projectId'];
+    });
+
+    const projectRef = doc(this.store, 'projects', this.projectId);
+    getDoc(projectRef).then((projectSnapshot) => {
+      if (projectSnapshot.exists()) {
+        this.project = projectSnapshot.data() as Project;
+      } else {
+        console.error('Projekt nie istnieje.');
+      }
+    })
+    .catch((error) => {
+      console.error('Wystąpił błąd:', error);
     });
 
     const todoCollection = collection(doc(this.store, 'projects', this.projectId), 'todo');
@@ -63,7 +81,9 @@ export class TaskListComponent{
     const dialogRef = this.dialog.open(TaskDialogComponent, {
       width: '270px',
       data: {
-        task: {},
+        task: {
+          createdBy: this.uid,
+        },
       },
     });
     dialogRef
@@ -81,7 +101,7 @@ export class TaskListComponent{
     const taskWithDate = {
       ...task,
       dueTo: task.dueTo.toDate(), // Convert the Firestore Timestamp to a JavaScript Date
-    }; 
+    };
     const dialogRef = this.dialog.open(TaskDialogComponent, {
       width: '30%',
       data: {
@@ -89,15 +109,42 @@ export class TaskListComponent{
         enableDelete: true,
       },
     });
-    dialogRef.afterClosed().subscribe((result: TaskDialogResult|undefined) => {
+    dialogRef.afterClosed().subscribe((result: TaskDialogResult | undefined) => {
       if (!result) {
         return;
       }
       const docRef = doc(this.store, `projects/${this.projectId}/${list}/${task.id}`) as DocumentReference;
-      if (result.delete) {
+      updateDoc(docRef, { ...result.task });
+    });
+  }
+
+  showDetails(list: 'done' | 'todo' | 'inProgress', task: Task): void {
+    const breakpoint = window.innerWidth;
+    let panelClass = '';
+
+    if (breakpoint >= 1200) { // xl breakpoint and above
+      panelClass = 'custom-dialog-xl';
+    } else if (breakpoint >= 768) { // md breakpoint and above
+      panelClass = 'custom-dialog-md';
+    } else {
+      panelClass = 'custom-dialog';
+    }
+
+    const dialogRef = this.dialog.open(TaskDetailsDialogComponent, {
+      panelClass: panelClass,
+      data: task,
+    });
+
+    dialogRef.afterClosed().subscribe((result: any) => {
+      if (!result) {
+        return;
+      }
+
+      if (result.action === 'edit') {
+        this.editTask(list, task);
+      } else if (result.action === 'delete') {
+        const docRef = doc(this.store, `projects/${this.projectId}/${list}/${task.id}`);
         deleteDoc(docRef);
-      } else {
-        updateDoc(docRef, { ... task });
       }
     });
   }

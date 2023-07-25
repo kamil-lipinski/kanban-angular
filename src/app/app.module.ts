@@ -33,7 +33,7 @@ import { BreadcrumbModule, BreadcrumbService } from 'xng-breadcrumb';
     AuthModule,
     SharedModule,
     CoreModule,
-    BreadcrumbModule
+    BreadcrumbModule,
   ],
   providers: [SnackbarService, BreadcrumbService],
   bootstrap: [AppComponent]

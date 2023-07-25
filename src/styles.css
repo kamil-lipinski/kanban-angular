@@ -22,3 +22,15 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .mat-mdc-paginator-page-size{
   visibility: hidden !important;
 }
+
+.custom-dialog-xl {
+  width: 33.33%;
+}
+
+.custom-dialog-md {
+  width: 50%;
+}
+
+.custom-dialog {
+  width: 66.66%;
+}

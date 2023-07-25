@@ -1,0 +1,19 @@
+<h2 mat-dialog-title>Szczegóły zadania</h2>
+<mat-dialog-content>
+  <p><strong>Zadanie:</strong> {{ data.title }}</p>
+  <p><strong>Opis:</strong> {{ data.description }}</p>
+  <p><strong>Termin:</strong> {{ data.dueTo | dateFormat }}</p>
+  <div class="flex items-center gap-x-2"><strong>Utworzone przez:</strong><app-user-info [userId]="data.createdBy"></app-user-info></div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-icon-button mat-dialog-close>
+    <mat-icon>close</mat-icon>
+  </button>
+  <button class="mb-4 w-44" mat-raised-button color="primary" (click)="editTask()">
+    Edytuj zadanie
+  </button>
+  <button class="mb-4 w-44" mat-raised-button color="primary" (click)="deleteTask()">
+    Usuń zadanie
+  </button>
+</mat-dialog-actions>
+

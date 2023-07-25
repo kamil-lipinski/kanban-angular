@@ -16,9 +16,9 @@ export class ProjectNewComponent implements OnInit{
   showLoading: boolean = false;
 
   constructor(
-    private store: Firestore, 
-    private formBuilder: FormBuilder, 
-    private snackbar: SnackbarService, 
+    private store: Firestore,
+    private formBuilder: FormBuilder,
+    private snackbar: SnackbarService,
     private router: Router
   ){
     this.uid = JSON.parse(localStorage.getItem('user')!).uid;
@@ -26,7 +26,7 @@ export class ProjectNewComponent implements OnInit{
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
-      title: ['', [Validators.required, Validators.minLength(6)]],
+      title: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(50),]],
       key: ['', [Validators.required, Validators.maxLength(4), this.capitalizeLetters]],
       colorCode: [this.generateRandomColor(), [Validators.required]]
     });
@@ -44,7 +44,7 @@ export class ProjectNewComponent implements OnInit{
   capitalizeLetters(control: AbstractControl): { [key: string]: boolean } | null {
     const key = control.value;
     if (key && key.length > 0) {
-      const capitalized = key.toUpperCase() 
+      const capitalized = key.toUpperCase()
       if (key !== capitalized) {
         control.setValue(capitalized);
       }
@@ -67,7 +67,7 @@ export class ProjectNewComponent implements OnInit{
         this.showLoading = false;
         this.snackbar.successSnackbar('Pomyślnie utworzono nowy projekt.');
       }).catch((error) => {
-        this.snackbar.errorSnackbar('Podczas tworzenia projektu wystąpił błąd.'); 
+        this.snackbar.errorSnackbar('Podczas tworzenia projektu wystąpił błąd.');
       });
     }
   }

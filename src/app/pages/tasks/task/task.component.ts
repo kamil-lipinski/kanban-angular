@@ -8,6 +8,6 @@ import { Task } from '../../../shared/models/task';
 })
 export class TaskComponent {
   @Input() task: Task | null = null;
-  @Output() edit = new EventEmitter<Task>();
+  @Output() showDetails = new EventEmitter<Task>();
 
 }

@@ -18,6 +18,7 @@
               <input matInput placeholder="Nazwa projektu" type="text" formControlName="title" />
               <mat-error *ngIf="form.get('title')!.hasError('required')">Wymagana nazwa</mat-error>
               <mat-error *ngIf="form.get('title')!.hasError('minlength')">Nazwa musi składać się z co najmniej 6 znaków</mat-error>
+              <mat-error *ngIf="form.get('title')!.hasError('maxlength')">Nazwa nie może składać się z więcej niż 50 znaków</mat-error>
             </mat-form-field>
           </div>
 

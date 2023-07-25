@@ -1,19 +1,8 @@
 import { Component, Inject } from '@angular/core';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { DateAdapter } from '@angular/material/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Task } from 'src/app/shared/models/task';
 
-export const MY_FORMATS = {
-  parse: {
-    dateInput: 'LL',
-  },
-  display: {
-    dateInput: 'DD/MM/YYYY',
-    monthYearLabel: 'MMM YYYY',
-    dateA11yLabel: 'LL',
-    monthYearA11yLabel: 'MMMM YYYY',
-  },
-};
 
 @Component({
   selector: 'app-task-dialog',
@@ -22,7 +11,6 @@ export const MY_FORMATS = {
 })
 export class TaskDialogComponent {
   private backupTask: Partial<Task> = { ...this.data.task };
-  private dateAdapter!: DateAdapter<Date>
   minDate: Date;
   maxDate: Date;
 

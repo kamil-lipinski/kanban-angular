@@ -7,6 +7,7 @@ import { TaskListComponent } from './task-list/task-list.component';
 import { TaskComponent } from './task/task.component';
 import { BreadcrumbModule } from 'xng-breadcrumb';
 import { DateFormatPipe } from 'src/app/shared/pipes/date-format.pipe';
+import { TaskDetailsDialogComponent } from './task-details-dialog/task-details-dialog.component';
 
 
 const routes: Routes = [
@@ -18,7 +19,8 @@ const routes: Routes = [
     TaskComponent,
     TaskDialogComponent,
     TaskListComponent,
-    DateFormatPipe
+    DateFormatPipe,
+    TaskDetailsDialogComponent,
   ],
   imports: [
     SharedModule,
