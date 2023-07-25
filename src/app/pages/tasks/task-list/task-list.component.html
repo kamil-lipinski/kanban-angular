@@ -2,7 +2,7 @@
   <div class="flex justify-center text-base w-full" style="background-color: #f5f5f5; height: full">
     <div class="w-3/4" style="margin-top: 26px;">
       <div class="flex sm:items-baseline sm:justify-between sm:flex-row items-center flex-col">
-        <div class="flex flex-col">
+        <div class="flex flex-col text-center sm:text-start">
           <h1 *ngIf="project" class="project-title"><strong>Projekt - {{project.title}}</strong></h1>
           <xng-breadcrumb class="mb-4 text-xs" style="color: #3f51b5;" [separator]="iconTemplate"></xng-breadcrumb>
         </div>
@@ -12,8 +12,8 @@
       </div>
 
       <div class="flex justify-between text-center">
-        <div style="width: 30%;">
-          <h2>Do zrobienia</h2>
+        <div style="width: 31%;">
+          <h2 class="whitespace-nowrap">Do zrobienia</h2>
 
           <mat-card
             cdkDropList
@@ -32,7 +32,7 @@
           </mat-card>
         </div>
 
-        <div style="width: 30%;">
+        <div style="width: 31%;">
           <h2>W trakcie</h2>
 
           <mat-card
@@ -52,7 +52,7 @@
           </mat-card>
         </div>
 
-        <div style="width: 30%;">
+        <div style="width: 31%;">
           <h2>Ukończone</h2>
 
           <mat-card

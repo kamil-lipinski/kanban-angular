@@ -1,7 +1,6 @@
 import { Component, Inject, inject, OnInit } from '@angular/core';
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { MatDialog } from '@angular/material/dialog';
-import { TaskDialogComponent, TaskDialogResult } from '../task-dialog/task-dialog.component';
 import { DocumentReference, Firestore, Timestamp, addDoc, collection, collectionData, deleteDoc, doc, getDoc, runTransaction, updateDoc } from '@angular/fire/firestore';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
@@ -10,6 +9,9 @@ import { AuthService } from 'src/app/auth/services/auth.service';
 import { Task } from 'src/app/shared/models/task';
 import { Project } from 'src/app/shared/models/project';
 import { TaskDetailsDialogComponent } from '../task-details-dialog/task-details-dialog.component';
+import { ConfirmationDialogComponent } from 'src/app/shared/components/confirmation-dialog/confirmation-dialog.component';
+import { SnackbarService } from 'src/app/core/services/snackbar.service';
+import { TaskDialogComponent } from '../task-dialog/task-dialog.component';
 
 @Component({
   selector: 'app-task-list',
@@ -30,7 +32,12 @@ export class TaskListComponent{
   inProgress: BehaviorSubject<Task[]> = new BehaviorSubject<Task[]>([]);
   done: BehaviorSubject<Task[]> = new BehaviorSubject<Task[]>([]);
 
-  constructor(private dialog: MatDialog, private store: Firestore, public authService: AuthService, private route: ActivatedRoute) {
+  constructor(private dialog: MatDialog,
+    private store: Firestore,
+    public authService: AuthService,
+    private route: ActivatedRoute,
+    private snackbar: SnackbarService
+    ){
     this.uid = JSON.parse(localStorage.getItem('user')!).uid;
   }
 
@@ -78,9 +85,20 @@ export class TaskListComponent{
   }
 
   newTask(): void {
+    const breakpoint = window.innerWidth;
+    let panelClass = '';
+
+    if (breakpoint >= 1200) { // xl breakpoint and above
+      panelClass = 'custom-dialog-xl';
+    } else if (breakpoint >= 768) { // md breakpoint and above
+      panelClass = 'custom-dialog-md';
+    } else {
+      panelClass = 'custom-dialog';
+    }
+
     const dialogRef = this.dialog.open(TaskDialogComponent, {
-      width: '270px',
       data: {
+        panelClass: panelClass,
         task: {
           createdBy: this.uid,
         },
@@ -88,7 +106,7 @@ export class TaskListComponent{
     });
     dialogRef
       .afterClosed()
-      .subscribe((result: TaskDialogResult|undefined) => {
+      .subscribe((result) => {
         if (!result) {
           return;
         }
@@ -98,18 +116,29 @@ export class TaskListComponent{
   }
 
   editTask(list: 'done' | 'todo' | 'inProgress', task: Task): void {
+    const breakpoint = window.innerWidth;
+    let panelClass = '';
+
+    if (breakpoint >= 1200) { // xl breakpoint and above
+      panelClass = 'custom-dialog-xl';
+    } else if (breakpoint >= 768) { // md breakpoint and above
+      panelClass = 'custom-dialog-md';
+    } else {
+      panelClass = 'custom-dialog';
+    }
+
     const taskWithDate = {
       ...task,
       dueTo: task.dueTo.toDate(), // Convert the Firestore Timestamp to a JavaScript Date
     };
     const dialogRef = this.dialog.open(TaskDialogComponent, {
-      width: '30%',
       data: {
+        panelClass: panelClass,
         task: taskWithDate,
         enableDelete: true,
       },
     });
-    dialogRef.afterClosed().subscribe((result: TaskDialogResult | undefined) => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (!result) {
         return;
       }
@@ -143,8 +172,22 @@ export class TaskListComponent{
       if (result.action === 'edit') {
         this.editTask(list, task);
       } else if (result.action === 'delete') {
-        const docRef = doc(this.store, `projects/${this.projectId}/${list}/${task.id}`);
-        deleteDoc(docRef);
+        const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+          width: '300px',
+          data: 'Czy na pewno chcesz usunąć to zadanie?'
+        });
+  
+        dialogRef.afterClosed().subscribe((result: boolean) => {
+          if (result) {
+            const docRef = doc(this.store, `projects/${this.projectId}/${list}/${task.id}`);
+            deleteDoc(docRef).then(() => {
+              this.snackbar.successSnackbar('Pomyślnie usunięto zadanie.');
+            })
+            .catch((error) => {
+              this.snackbar.errorSnackbar('Podczas usuwania zadania wystąpił błąd.');
+            });
+          }
+        });
       }
     });
   }

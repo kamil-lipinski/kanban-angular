@@ -15,14 +15,16 @@
 
           <div class="mb-4">
             <mat-form-field class="w-full">
+              <mat-label>Nazwa projektu</mat-label>
               <input matInput placeholder="Nazwa projektu" type="text" formControlName="title" />
               <mat-error *ngIf="form.get('title')!.hasError('required')">Wymagana nazwa</mat-error>
               <mat-error *ngIf="form.get('title')!.hasError('minlength')">Nazwa musi składać się z co najmniej 6 znaków</mat-error>
-            </mat-form-field>
+            </mat-form-field> 
           </div>
 
           <div class="mb-4">
             <mat-form-field class="w-full">
+              <mat-label>Skrót</mat-label>
               <input matInput placeholder="Skrót" type="text" formControlName="key" />
               <mat-error *ngIf="form.get('key')!.hasError('required')">Wymagany skrót</mat-error>
               <mat-error *ngIf="form.get('key')!.hasError('maxlength')">Skrót może składać się maksymalnie z 4 znaków</mat-error>
