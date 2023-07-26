@@ -1,36 +1,23 @@
-<div class="w-full">
-  <mat-card class="p-6">
-    <div class="mb-4">Edytuj zadanie</div>
-    <form class="w-full">
-      <div class="mb-4flex justify-center">
-        <mat-form-field>
-          <mat-label>Title</mat-label>
-          <input matInput cdkFocusInitial [(ngModel)]="data.task.title" />
-        </mat-form-field>
-      </div>
+<mat-form-field>
+  <mat-label>Title</mat-label>
+  <input matInput cdkFocusInitial [(ngModel)]="data.task.title" />
+</mat-form-field>
 
-      <div class="mb-4 flex justify-center">
-        <mat-form-field>
-          <mat-label>Description</mat-label>
-          <textarea matInput [(ngModel)]="data.task.description"></textarea>
-        </mat-form-field>
-      </div>
+<mat-form-field>
+  <mat-label>Description</mat-label>
+  <textarea matInput [(ngModel)]="data.task.description"></textarea>
+</mat-form-field>
 
-      <div class="mb-4 flex justify-center">
-        <mat-form-field>
-          <mat-label>Choose a date</mat-label>
-          <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="picker" [(ngModel)]="data.task.dueTo">
-          <mat-hint>MM/DD/YYYY</mat-hint>
-          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-      </div>
-    </form>
+<mat-form-field>
+  <mat-label>Choose a date</mat-label>
+  <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="picker" [(ngModel)]="data.task.dueTo">
+  <mat-hint>MM/DD/YYYY</mat-hint>
+  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-datepicker #picker></mat-datepicker>
+</mat-form-field>
 
 
-    <div mat-dialog-actions>
-      <button mat-button [mat-dialog-close]="{ task: data.task }">OK</button>
-      <button mat-button (click)="cancel()">Cancel</button>
-    </div>
-  </mat-card>
+<div mat-dialog-actions>
+  <button mat-button [mat-dialog-close]="{ task: data.task }">OK</button>
+  <button mat-button (click)="cancel()">Cancel</button>
 </div>

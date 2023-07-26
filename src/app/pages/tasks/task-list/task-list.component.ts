@@ -176,7 +176,7 @@ export class TaskListComponent{
           width: '300px',
           data: 'Czy na pewno chcesz usunąć to zadanie?'
         });
-  
+
         dialogRef.afterClosed().subscribe((result: boolean) => {
           if (result) {
             const docRef = doc(this.store, `projects/${this.projectId}/${list}/${task.id}`);
