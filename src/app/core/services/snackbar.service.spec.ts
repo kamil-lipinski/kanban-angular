@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { SnackbarService } from './snackbar.service';
 
-fdescribe('SnackbarService', () => {
+describe('SnackbarService', () => {
   let snackbarService: SnackbarService;
   let mockSnackBar: any;
 
