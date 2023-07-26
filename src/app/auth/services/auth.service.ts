@@ -109,6 +109,25 @@ export class AuthService {
       return Promise.reject(new Error('No user is currently signed in.'));
     }
   }
+
+  SendVerificationMail2() {
+    const user = this.afAuth.currentUser;
+    if (user !== null) {
+      return auth.sendEmailVerification(user).then(() => {
+        this.snackBar.successSnackbar('Wysłana została wiadomość E-mail z nowym linkiem.');
+      }).catch((error) => {
+        if(error.message == 'Firebase: Error (auth/too-many-requests).'){
+          this.snackBar.errorSnackbar('Nowy link został już wysłany, poczekaj chwilę przed wysłaniem kolejnego.');
+        }
+        else{
+          this.snackBar.errorSnackbar(`${error.message}`);
+        }
+      });
+    } else {
+      return Promise.reject(new Error('No user is currently signed in.'));
+    }
+  }
+
   // Reset Forggot password
   ForgotPassword(passwordResetEmail: string) {
     return auth.sendPasswordResetEmail(this.afAuth,passwordResetEmail)

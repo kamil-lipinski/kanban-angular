@@ -22,7 +22,7 @@ const routes: Routes = [
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'verify-email-address', component: VerifyEmailComponent },
   { path: '404-not-found', component: NotFoundComponent },
-  { path: '**', redirectTo: '/404-not-found' },
+  // { path: '**', redirectTo: '/404-not-found' },
 ];
 
 @NgModule({

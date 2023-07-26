@@ -4,14 +4,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { DocumentReference, Firestore, Timestamp, addDoc, collection, collectionData, deleteDoc, doc, getDoc, runTransaction, updateDoc } from '@angular/fire/firestore';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { Task } from 'src/app/shared/models/task';
 import { Project } from 'src/app/shared/models/project';
 import { TaskDetailsDialogComponent } from '../task-details-dialog/task-details-dialog.component';
 import { ConfirmationDialogComponent } from 'src/app/shared/components/confirmation-dialog/confirmation-dialog.component';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
-import { TaskDialogComponent } from '../task-dialog/task-dialog.component';
 
 @Component({
   selector: 'app-task-list',
@@ -36,7 +35,8 @@ export class TaskListComponent{
     private store: Firestore,
     public authService: AuthService,
     private route: ActivatedRoute,
-    private snackbar: SnackbarService
+    private snackbar: SnackbarService,
+    private router: Router,
     ){
     this.uid = JSON.parse(localStorage.getItem('user')!).uid;
   }
@@ -64,87 +64,37 @@ export class TaskListComponent{
 
     collectionData(todoCollection, { idField: 'id' }).pipe(
       tap((tasks) => {
-        this.todo.next(tasks as Task[]);
+        this.todo.next(this.sortTasksByDate(tasks) as Task[]);
         this.loadingTodo = false;
       })
     ).subscribe();
 
     collectionData(inProgressCollection, { idField: 'id' }).pipe(
       tap((tasks) => {
-        this.inProgress.next(tasks as Task[]);
+        this.inProgress.next(this.sortTasksByDate(tasks) as Task[]);
         this.loadingInProgress = false;
       })
     ).subscribe();
 
     collectionData(doneCollection, { idField: 'id' }).pipe(
       tap((tasks) => {
-        this.done.next(tasks as Task[]);
+        this.done.next(this.sortTasksByDate(tasks) as Task[]);
         this.loadingDone = false;
       })
     ).subscribe();
   }
 
-  newTask(): void {
-    const breakpoint = window.innerWidth;
-    let panelClass = '';
-
-    if (breakpoint >= 1200) { // xl breakpoint and above
-      panelClass = 'custom-dialog-xl';
-    } else if (breakpoint >= 768) { // md breakpoint and above
-      panelClass = 'custom-dialog-md';
-    } else {
-      panelClass = 'custom-dialog';
-    }
-
-    const dialogRef = this.dialog.open(TaskDialogComponent, {
-      data: {
-        panelClass: panelClass,
-        task: {
-          createdBy: this.uid,
-        },
-      },
-    });
-    dialogRef
-      .afterClosed()
-      .subscribe((result) => {
-        if (!result) {
-          return;
-        }
-        const docRef = doc(this.store, 'projects', this.projectId);
-        addDoc(collection(docRef, 'todo'), result.task);
-      });
-  }
-
-  editTask(list: 'done' | 'todo' | 'inProgress', task: Task): void {
-    const breakpoint = window.innerWidth;
-    let panelClass = '';
-
-    if (breakpoint >= 1200) { // xl breakpoint and above
-      panelClass = 'custom-dialog-xl';
-    } else if (breakpoint >= 768) { // md breakpoint and above
-      panelClass = 'custom-dialog-md';
-    } else {
-      panelClass = 'custom-dialog';
-    }
-
-    const taskWithDate = {
-      ...task,
-      dueTo: task.dueTo.toDate(), // Convert the Firestore Timestamp to a JavaScript Date
-    };
-    const dialogRef = this.dialog.open(TaskDialogComponent, {
-      data: {
-        panelClass: panelClass,
-        task: taskWithDate,
-        enableDelete: true,
-      },
-    });
-    dialogRef.afterClosed().subscribe((result) => {
-      if (!result) {
-        return;
-      }
-      const docRef = doc(this.store, `projects/${this.projectId}/${list}/${task.id}`) as DocumentReference;
-      updateDoc(docRef, { ...result.task });
-    });
+  sortTasksByDate(tasks: any[]): Task[] {
+    return tasks.map((taskData: any) => {
+      const task: Task = {
+        id: taskData.id,
+        title: taskData.title,
+        description: taskData.description,
+        dueTo: taskData.dueTo,
+        createdBy: taskData.createdBy
+      };
+      return task;
+    }).sort((a, b) => a.dueTo.toDate().getTime() - b.dueTo.toDate().getTime());
   }
 
   showDetails(list: 'done' | 'todo' | 'inProgress', task: Task): void {
@@ -170,7 +120,7 @@ export class TaskListComponent{
       }
 
       if (result.action === 'edit') {
-        this.editTask(list, task);
+        this.router.navigate([`/projects/${this.projectId}/tasks/${task.id}/${list}/edit-task`]);
       } else if (result.action === 'delete') {
         const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
           width: '300px',

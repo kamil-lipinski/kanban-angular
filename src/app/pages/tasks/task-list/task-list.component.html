@@ -6,7 +6,7 @@
           <h1 *ngIf="project" class="project-title"><strong>Projekt - {{project.title}}</strong></h1>
           <xng-breadcrumb class="mb-4 text-xs" style="color: #3f51b5;" [separator]="iconTemplate"></xng-breadcrumb>
         </div>
-        <button class="mb-4 w-44" mat-raised-button color="primary" (click)="newTask()" mat-button>
+        <button class="mb-4 w-44" mat-raised-button color="primary" [routerLink]="['/projects', projectId, 'tasks', 'new-task']" mat-button>
           Nowe zadanie
         </button>
       </div>

@@ -1,0 +1,53 @@
+<div class="grid place-items-center w-full absolute top-16" style="height: calc(100% - 64px); background-color: #f5f5f5;">
+  <div class="flex items-center justify-center text-base w-full h-full" style="background-color: #f5f5f5">
+    <div class="w-2/3 md:w-1/2 xl:w-1/3">
+      <mat-card class="p-6">
+        <div class="mb-4">Nowe zadanie</div>
+        <xng-breadcrumb class="mb-4 text-xs" style="color: #3f51b5;" [separator]="iconTemplate"></xng-breadcrumb>
+
+        <form [formGroup]="form" class="w-full">
+
+          <div class="mb-4">
+            <mat-form-field class="w-full">
+              <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="picker" placeholder="Termin" formControlName="dueTo">
+              <mat-hint>MM/DD/YYYY</mat-hint>
+              <mat-error *ngIf="form.get('dueTo')!.hasError('required')">Wymagany termin</mat-error>
+              <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </div>
+
+
+          <div class="mb-4">
+            <mat-form-field class="w-full">
+              <input matInput placeholder="Tytuł zadania" type="text" formControlName="title" />
+              <mat-error *ngIf="form.get('title')!.hasError('required')">Wymagany tytuł</mat-error>
+              <mat-error *ngIf="form.get('title')!.hasError('maxlength')">Tytuł nie może składać się z więcej niż 30 znaków</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="mb-4">
+            <mat-form-field class="w-full">
+              <textarea matInput placeholder="Opis" type="text" formControlName="description" style="height: 96px;"></textarea>
+            </mat-form-field>
+          </div>
+
+          <button mat-raised-button color="primary" class="w-full mb-4" [disabled]="!form.valid" (click)="newTask()" (click)="showLoading=true">Stwórz</button>
+          <button mat-raised-button color="primary" class="w-full mb-4" [routerLink]="['/projects', projectId, 'tasks']">Anuluj</button>
+        </form>
+
+      </mat-card>
+      <ng-container *ngIf="showLoading; else noLoading">
+        <mat-progress-bar mode="indeterminate" style="border-radius: 50%; height: 30px;"></mat-progress-bar>
+      </ng-container>
+    </div>
+  </div>
+</div>
+
+<ng-template #noLoading>
+  <mat-progress-bar mode="indeterminate" style="border-radius: 50%; height: 30px; visibility: hidden;"></mat-progress-bar>
+</ng-template>
+
+<ng-template #iconTemplate>
+  <mat-icon>chevron_right</mat-icon>
+</ng-template>

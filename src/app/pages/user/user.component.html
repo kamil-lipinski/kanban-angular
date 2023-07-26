@@ -11,13 +11,13 @@
           <!-- <p class="profile-field">Imię: <strong>{{ user.displayName || 'N/A' }}</strong></p> -->
           <p class="profile-field">E-mail: <strong>{{ user.email }}</strong></p>
           <p class="profile-field">E-mail zferyfikowany: <strong>{{ user.emailVerified ? 'Tak' : 'Nie' }}</strong></p>
-        </div>
 
-        <!-- <div class="flex justify-center">
-          <button mat-raised-button color="primary" class="w-2/3 lg:w-1/2 2xl:w-1/3 mb-4">
-              Edytuj dane
-          </button>
-        </div> -->
+          <div *ngIf="!user.emailVerified" class="flex justify-center">
+            <button mat-raised-button color="primary" class="mb-4" (click)="authService.SendVerificationMail2()">
+                Wyślij mail weryfikacyjny
+            </button>
+          </div>
+        </div>
 
       </mat-card>
       <div style="height: 30px;"></div>

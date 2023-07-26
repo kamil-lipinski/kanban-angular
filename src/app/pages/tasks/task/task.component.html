@@ -1,4 +1,8 @@
 <mat-card class="item" *ngIf="task" (click)="showDetails.emit(task)">
   <h2>{{ task.title }}</h2>
-  <p>Termin: {{ task.dueTo | dateFormat }}</p>
+  <div class=" text-sm mt-2">
+    <p [ngClass]="{ 'past-due': task.dueTo < currentDate, 'future-due': task.dueTo > currentDate }">
+      Termin: <strong>{{ task.dueTo | dateFormat }}</strong>
+    </p>
+  </div>
 </mat-card>
