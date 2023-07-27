@@ -54,7 +54,7 @@ export class TaskEditComponent implements OnInit {
 
         this.form = this.formBuilder.group({
           title: [this.task.title, [Validators.required, Validators.maxLength(30),]],
-          description: [this.task.description],
+          description: [this.task.description, [Validators.maxLength(500)]],
           dueTo: [this.task.dueTo.toDate(), [Validators.required]]
         }, {
           validator: this.anyFieldChangedValidator()

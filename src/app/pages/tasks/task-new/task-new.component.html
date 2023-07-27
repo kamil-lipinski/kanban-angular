@@ -29,6 +29,7 @@
           <div class="mb-4">
             <mat-form-field class="w-full">
               <textarea matInput placeholder="Opis" type="text" formControlName="description" style="height: 96px;"></textarea>
+              <mat-error *ngIf="form.get('description')!.hasError('maxlength')">Opis nie może składać się z więcej niż 500 znaków</mat-error>
             </mat-form-field>
           </div>
 

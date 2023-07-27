@@ -37,7 +37,7 @@ export class TaskNewComponent implements OnInit {
 
     this.form = this.formBuilder.group({
       title: ['', [Validators.required, Validators.maxLength(30),]],
-      description: [''],
+      description: ['', Validators.maxLength(500)],
       dueTo: ['', [Validators.required]]
     });
   }

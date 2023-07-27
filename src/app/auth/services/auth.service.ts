@@ -17,7 +17,7 @@ export class AuthService {
     public afs: Firestore, // Inject Firestore service
     public afAuth: Auth, // Inject Firebase auth service
     public router: Router,
-    // public ngZone: NgZone, // NgZone service to remove outside scope warning
+    public ngZone: NgZone, // NgZone service to remove outside scope warning
     private snackBar: SnackbarService
   ) {
     /* Saving user data in localstorage when

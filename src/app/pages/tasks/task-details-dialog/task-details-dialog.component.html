@@ -1,50 +1,39 @@
-<div class="text-base p-6">
-  <div class="flex justify-between items-baseline mb-4">
-    <div class="text-lg tracking-wide">Szczegóły zadania</div>
-    <button class="h-0 w-0"></button>
-    <button mat-icon-button mat-dialog-close>
-      <mat-icon class="text-sm font-bold">close</mat-icon>
-    </button>
-  </div>
-    <div class="flex flex-col">
-      <div class="mb-4">
-        <div class="flex justify-between">
-          <div class="w-1/2">
-            <p class="tracking-wide">Tytuł</p>
-            <div class="box h-14 rounded p-4  flex items-center ">
-              {{ data.title }}
-            </div>
-          </div>
-          <div class="w-1/3 text-center">
-            <p class="tracking-wide">Termin</p>
-            <div class="box h-14 rounded p-4  flex items-center justify-center">
-              {{ data.dueTo | dateFormat }}
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <div class="mb-4">
-        <p class="tracking-wide">Opis</p>
-        <div class="box w-full h-28 rounded p-4  flex overflow-y-auto ">
-          {{ data.description }}
-        </div>
-      </div>
-      
-      <div class="mb-8 text-center">
-        <p class="tracking-wide">Utworzone przez</p>
-        <div class="h-14 flex items-center justify-center">
-          <app-user-info class="box rounded p-3 " [userId]="data.createdBy"></app-user-info>
-        </div>
-      </div>
-
+<div class="p-6">
+  <div class="px-4 sm:px-0">
+    <div class="flex justify-between items-baseline mb-4">
+      <div class="text-lg tracking-wide">Szczegóły zadania</div>
+      <button class="h-0 w-0"></button>
+      <button mat-icon-button mat-dialog-close>
+        <mat-icon class="text-sm font-bold">close</mat-icon>
+      </button>
     </div>
-  <div class="flex space-x-4 justify-center">
-    <button class="mb-4 w-44" mat-raised-button color="primary" (click)="editTask()">
-      Edytuj zadanie
-    </button>
-    <button class="mb-4 w-44" mat-raised-button color="primary" (click)="deleteTask()">
-      Usuń zadanie
-    </button>
   </div>
-</div> 
+  <div class="mt-6 border-t border-gray-100">
+    <dl class="divide-y divide-gray-100">
+      <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+        <dt class="text-sm font-medium leading-6 text-gray-900">Tytuł zadania</dt>
+        <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ data.title }}</dd>
+      </div>
+      <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+        <dt class="text-sm font-medium leading-6 text-gray-900">Termin</dt>
+        <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ data.dueTo | dateFormat }}</dd>
+      </div>
+      <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+        <dt class="text-sm font-medium leading-6 text-gray-900">Utworzone przez</dt>
+        <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"><app-user-info [userId]="data.createdBy"></app-user-info></dd>
+      </div>
+      <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+        <dt class="text-sm font-medium leading-6 text-gray-900">Opis</dt>
+        <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ data.description }}</dd>
+      </div>
+      <div class="px-4 py-6 gap-8 flex justify-center">
+        <button mat-raised-button color="primary" (click)="editTask()">
+          Edytuj zadanie
+        </button>
+        <button mat-raised-button color="primary" (click)="deleteTask()">
+          Usuń zadanie
+        </button>
+      </div>
+    </dl>
+  </div>
+</div>
