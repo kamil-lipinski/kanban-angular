@@ -3,7 +3,7 @@
     <div class="w-3/4" style="margin-top: 26px;">
       <div class="flex sm:items-baseline sm:justify-between sm:flex-row items-center flex-col">
         <div class="flex flex-col text-center sm:text-start">
-          <h1 *ngIf="project" class="project-title"><strong>Projekt - {{project.title}}</strong></h1>
+          <h1 *ngIf="project; else noProject" class="project-title"><strong>Projekt - {{project.title}}</strong></h1>
           <xng-breadcrumb class="mb-4 text-xs" style="color: #3f51b5;" [separator]="iconTemplate"></xng-breadcrumb>
         </div>
         <button class="mb-4 w-44" mat-raised-button color="primary" [routerLink]="['/projects', projectId, 'tasks', 'new-task']" mat-button>
@@ -80,6 +80,10 @@
   <div class="spinner-container">
     <mat-spinner></mat-spinner>
   </div>
+</ng-template>
+
+<ng-template #noProject>
+  <h1 class="project-title"><strong>Projekt</strong></h1>
 </ng-template>
 
 <ng-template #iconTemplate>
