@@ -3,8 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-project-dialog-join',
-  templateUrl: './project-dialog-join.component.html',
-  styleUrls: ['./project-dialog-join.component.css']
+  templateUrl: './project-dialog-join.component.html'
 })
 export class ProjectDialogJoinComponent{
   constructor(

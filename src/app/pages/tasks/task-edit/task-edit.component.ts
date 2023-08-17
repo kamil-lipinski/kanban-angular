@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Firestore, doc, updateDoc, DocumentReference, getDoc, } from '@angular/fire/firestore';
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SnackbarService } from 'src/app/core/services/snackbar.service';
-import { Task } from 'src/app/shared/models/task';
+import { Task } from 'src/app/models/task';
+import { SnackbarService } from 'src/app/services/snackbar.service';
 
 @Component({
   selector: 'app-task-edit',

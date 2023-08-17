@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Firestore, doc, getDoc, updateDoc } from '@angular/fire/firestore';
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SnackbarService } from 'src/app/core/services/snackbar.service';
-import { Project } from 'src/app/shared/models/project';
+import { Project } from 'src/app/models/project';
+import { SnackbarService } from 'src/app/services/snackbar.service';
 
 @Component({
   selector: 'app-project-edit',

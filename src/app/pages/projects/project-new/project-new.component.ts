@@ -2,13 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { Firestore, addDoc, collection, Timestamp, } from '@angular/fire/firestore';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { SnackbarService } from 'src/app/core/services/snackbar.service';
+import { SnackbarService } from 'src/app/services/snackbar.service';
 
 
 @Component({
   selector: 'app-project-new',
-  templateUrl: './project-new.component.html',
-  styleUrls: ['./project-new.component.css']
+  templateUrl: './project-new.component.html'
 })
 export class ProjectNewComponent implements OnInit{
   private uid: string;

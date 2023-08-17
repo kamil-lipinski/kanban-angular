@@ -1,7 +1,7 @@
 <mat-toolbar color="primary" class="flex justify-between items-center top-0 w-full fixed z-50" style="height: 64px;">
   <div class="flex items-center space-x-10">
     <span>Kanban App</span>
-    <button mat-button routerLink="/projects">
+    <button mat-button routerLink="/projects" [ngClass]="isProjektyActive ? 'active' : 'notActive'">
       Projekty
     </button>
   </div>

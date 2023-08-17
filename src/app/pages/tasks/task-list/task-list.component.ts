@@ -1,16 +1,16 @@
-import { Component, Inject, inject, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { MatDialog } from '@angular/material/dialog';
-import { DocumentReference, Firestore, Timestamp, addDoc, collection, collectionData, deleteDoc, doc, getDoc, runTransaction, updateDoc } from '@angular/fire/firestore';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { Firestore, addDoc, collection, collectionData, deleteDoc, doc, getDoc, runTransaction} from '@angular/fire/firestore';
+import { BehaviorSubject } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from 'src/app/auth/services/auth.service';
-import { Task } from 'src/app/shared/models/task';
-import { Project } from 'src/app/shared/models/project';
+import { AuthService } from 'src/app/services/auth.service';
+import { Task } from 'src/app/models/task';
+import { Project } from 'src/app/models/project';
 import { TaskDetailsDialogComponent } from '../task-details-dialog/task-details-dialog.component';
-import { ConfirmationDialogComponent } from 'src/app/shared/components/confirmation-dialog/confirmation-dialog.component';
-import { SnackbarService } from 'src/app/core/services/snackbar.service';
+import { ConfirmationDialogComponent } from 'src/app/components/confirmation-dialog/confirmation-dialog.component';
+import { SnackbarService } from 'src/app/services/snackbar.service';
 
 @Component({
   selector: 'app-task-list',

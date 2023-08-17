@@ -1,0 +1,7 @@
+.active {
+    color: white !important;
+}
+
+.notActive{
+    color: rgba(255, 255, 255, 0.805) !important;
+}

@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { Task } from '../../../shared/models/task';
+import { Task } from '../../../models/task';
 import { Timestamp } from '@angular/fire/firestore';
 
 @Component({

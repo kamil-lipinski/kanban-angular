@@ -3,16 +3,16 @@ import { MatDialog } from '@angular/material/dialog';
 import { Firestore, getDoc, collection, collectionData, deleteDoc, doc, updateDoc, query, where, or } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Project } from 'src/app/shared/models/project';
-import { SnackbarService } from 'src/app/core/services/snackbar.service';
-import { AuthService } from 'src/app/auth/services/auth.service';
+import { Project } from 'src/app/models/project';
+import { AuthService } from 'src/app/services/auth.service';
 import { ProjectDialogJoinComponent } from '../project-dialog-join/project-dialog-join.component';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { Router } from '@angular/router';
-import { ConfirmationDialogComponent } from 'src/app/shared/components/confirmation-dialog/confirmation-dialog.component';
-import { UserService } from 'src/app/core/services/user.service';
+import { UserService } from 'src/app/services/user.service';
+import { ConfirmationDialogComponent } from 'src/app/components/confirmation-dialog/confirmation-dialog.component';
+import { SnackbarService } from 'src/app/services/snackbar.service';
 
 interface ProjectWithOwnerEmail extends Project {
   ownerEmail: string;

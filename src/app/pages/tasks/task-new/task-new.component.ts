@@ -2,12 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Firestore, addDoc, collection, Timestamp, doc, } from '@angular/fire/firestore';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SnackbarService } from 'src/app/core/services/snackbar.service';
+import { SnackbarService } from 'src/app/services/snackbar.service';
 
 @Component({
   selector: 'app-task-new',
-  templateUrl: './task-new.component.html',
-  styleUrls: ['./task-new.component.css']
+  templateUrl: './task-new.component.html'
 })
 export class TaskNewComponent implements OnInit {
   private uid: string;
