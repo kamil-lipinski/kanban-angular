@@ -1,6 +1,6 @@
 export const environment = {
   firebase: {
-    apiKey: "AIzaSyBfGMLopt28B6o8XSogz384EWsF8RD5xYw",
+    apiKey: "XXXXXXXXXXXXXXXX",
     authDomain: "kanbanfire-94cdf.firebaseapp.com",
     projectId: "kanbanfire-94cdf",
     storageBucket: "kanbanfire-94cdf.appspot.com",
